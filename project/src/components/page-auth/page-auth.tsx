@@ -1,7 +1,7 @@
 import React from 'react';
 import Icons from '../icons/icons';
 
-function Auth(): JSX.Element {
+function PageAuth(): JSX.Element {
   return (
     <React.Fragment>
       <Icons/>
@@ -49,4 +49,4 @@ function Auth(): JSX.Element {
   );
 }
 
-export default Auth;
+export default PageAuth;
