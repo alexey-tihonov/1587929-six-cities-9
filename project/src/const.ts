@@ -1,3 +1,5 @@
+export const MAX_RATING = 5;
+
 export enum AppRoute {
   Login = '/login',
   Favorites = '/favorites',

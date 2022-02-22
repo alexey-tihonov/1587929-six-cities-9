@@ -1,7 +1,27 @@
 import {Fragment} from 'react';
+import {MAX_RATING} from '../../const';
 import PlaceCardOther from '../../components/place-card-other/place-card-other';
+import {Offer} from '../../types/offer';
+import {Review} from '../../types/review';
 
-function Room(): JSX.Element {
+const getDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const dateTime = `${date.getFullYear()} ${date.getMonth() + 1} ${date.getDate}`;
+  const dateText = date.toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
+  return {dateTime: dateTime, dateText: dateText};
+};
+
+const getPercent = (partialValue: number, totalValue: number) => (100 * partialValue) / totalValue;
+
+type RoomProps = {
+  property: Offer;
+  reviews: Review[];
+}
+
+function Room(props: RoomProps): JSX.Element {
+  const {property, reviews} = props;
+  const {host} = property;
+
   return (
     <Fragment>
       <section className="property">
@@ -30,11 +50,11 @@ function Room(): JSX.Element {
         <div className="property__container container">
           <div className="property__wrapper">
             <div className="property__mark">
-              <span>Premium</span>
+              {property.isPremium && <span>Premium</span>}
             </div>
             <div className="property__name-wrapper">
               <h1 className="property__name">
-                Beautiful &amp; luxurious studio at great location
+                {property.title}
               </h1>
               <button className="property__bookmark-button button" type="button">
                 <svg className="property__bookmark-icon" width="31" height="33">
@@ -45,24 +65,24 @@ function Room(): JSX.Element {
             </div>
             <div className="property__rating rating">
               <div className="property__stars rating__stars">
-                <span style={{width: '80%'}}></span>
+                <span style={{width: `${getPercent(property.rating, MAX_RATING)}%`}}></span>
                 <span className="visually-hidden">Rating</span>
               </div>
-              <span className="property__rating-value rating__value">4.8</span>
+              <span className="property__rating-value rating__value">{property.rating}</span>
             </div>
             <ul className="property__features">
               <li className="property__feature property__feature--entire">
-                Apartment
+                {property.type}
               </li>
               <li className="property__feature property__feature--bedrooms">
-                3 Bedrooms
+                {property.bedrooms} Bedrooms
               </li>
               <li className="property__feature property__feature--adults">
-                Max 4 adults
+                Max {property.maxAdults} adults
               </li>
             </ul>
             <div className="property__price">
-              <b className="property__price-value">&euro;120</b>
+              <b className="property__price-value">&euro;{property.price}</b>
               <span className="property__price-text">&nbsp;night</span>
             </div>
             <div className="property__inside">
@@ -104,46 +124,48 @@ function Room(): JSX.Element {
               <h2 className="property__host-title">Meet the host</h2>
               <div className="property__host-user user">
                 <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
-                  <img className="property__avatar user__avatar" src="img/avatar-angelina.jpg" width="74" height="74" alt="Host avatar"/>
+                  <img className="property__avatar user__avatar" src={host.avatarUrl} width="74" height="74" alt="Host avatar"/>
                 </div>
-                <span className="property__user-name">Angelina</span>
-                <span className="property__user-status">Pro</span>
+                <span className="property__user-name">{host.name}</span>
+                {host.isPro && <span className="property__user-status">Pro</span>}
               </div>
               <div className="property__description">
                 <p className="property__text">
-                  A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The
-                  building is green and from 18th century.
-                </p>
-                <p className="property__text">
-                  An independent House, strategically located between Rembrand Square and National Opera, but where
-                  the bustle of the city comes to rest in this alley flowery and colorful.
+                  {property.description}
                 </p>
               </div>
             </div>
             <section className="property__reviews reviews">
-              <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">1</span></h2>
+              <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
+              </h2>
               <ul className="reviews__list">
-                <li className="reviews__item">
-                  <div className="reviews__user user">
-                    <div className="reviews__avatar-wrapper user__avatar-wrapper">
-                      <img className="reviews__avatar user__avatar" src="img/avatar-max.jpg" width="54" height="54" alt="Reviews avatar"/>
-                    </div>
-                    <span className="reviews__user-name">Max</span>
-                  </div>
-                  <div className="reviews__info">
-                    <div className="reviews__rating rating">
-                      <div className="reviews__stars rating__stars">
-                        <span style={{width: '80%'}}></span>
-                        <span className="visually-hidden">Rating</span>
+                {reviews.map((review, id) => {
+                  const keyValue = id;
+                  const {user} = review;
+                  const {dateTime, dateText} = getDate(review.date);
+                  return (
+                    <li key={keyValue} className="reviews__item">
+                      <div className="reviews__user user">
+                        <div className="reviews__avatar-wrapper user__avatar-wrapper">
+                          <img className="reviews__avatar user__avatar" src={user.avatarUrl} width="54" height="54" alt="Reviews avatar"/>
+                        </div>
+                        <span className="reviews__user-name">{user.name}</span>
                       </div>
-                    </div>
-                    <p className="reviews__text">
-                      A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
-                      The building is green and from 18th century.
-                    </p>
-                    <time className="reviews__time" dateTime="2019-04-24">April 2019</time>
-                  </div>
-                </li>
+                      <div className="reviews__info">
+                        <div className="reviews__rating rating">
+                          <div className="reviews__stars rating__stars">
+                            <span style={{width: `${getPercent(review.rating, MAX_RATING)}%`}}></span>
+                            <span className="visually-hidden">Rating</span>
+                          </div>
+                        </div>
+                        <p className="reviews__text">
+                          {review.comment}
+                        </p>
+                        <time className="reviews__time" dateTime={dateTime}>{dateText}</time>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
               <form className="reviews__form form" action="#" method="post">
                 <label className="reviews__label form__label" htmlFor="review">Your review</label>
@@ -201,9 +223,9 @@ function Room(): JSX.Element {
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            <PlaceCardOther />
-            <PlaceCardOther />
-            <PlaceCardOther />
+            <PlaceCardOther/>
+            <PlaceCardOther/>
+            <PlaceCardOther/>
           </div>
         </section>
       </div>

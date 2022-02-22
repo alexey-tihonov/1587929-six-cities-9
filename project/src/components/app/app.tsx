@@ -1,7 +1,5 @@
 import {Route, BrowserRouter, Routes} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const';
-import {Offer} from '../../types/offer';
-import {Review} from '../../types/review';
 import PrivateRoute from '../private-route/private-route';
 import Layout from '../layout/layout';
 import Main from '../../pages/main/main';
@@ -9,6 +7,8 @@ import NotFound from '../../pages/not-found/not-found';
 import Login from '../../pages/login/login';
 import Favorites from '../../pages/favorites/favorites';
 import Room from '../../pages/room/room';
+import {Offer} from '../../types/offer';
+import {Review} from '../../types/review';
 
 type AppProps = {
   rentOffersCount: number;
@@ -16,7 +16,8 @@ type AppProps = {
   reviews: Review[];
 }
 
-function App({rentOffersCount, offers}: AppProps): JSX.Element {
+function App({rentOffersCount, offers, reviews}: AppProps): JSX.Element {
+  const [firstOffer] = offers;
   return (
     <BrowserRouter>
       <Routes>
@@ -30,7 +31,7 @@ function App({rentOffersCount, offers}: AppProps): JSX.Element {
               </PrivateRoute>
             }
           />
-          <Route path={AppRoute.Room} element={<Room/>}/>
+          <Route path={AppRoute.Room} element={<Room property={firstOffer} reviews={reviews}/>}/>
           <Route path="*" element={<NotFound/>}/>
         </Route>
       </Routes>
