@@ -1,5 +1,7 @@
 import {Route, BrowserRouter, Routes} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../const';
+import {Offer} from '../../types/offer';
+import {Review} from '../../types/review';
 import PrivateRoute from '../private-route/private-route';
 import Layout from '../layout/layout';
 import Main from '../../pages/main/main';
@@ -10,9 +12,11 @@ import Room from '../../pages/room/room';
 
 type AppProps = {
   rentOffersCount: number;
+  offers: Offer[];
+  reviews: Review[];
 }
 
-function App({rentOffersCount}: AppProps): JSX.Element {
+function App({rentOffersCount, offers}: AppProps): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
