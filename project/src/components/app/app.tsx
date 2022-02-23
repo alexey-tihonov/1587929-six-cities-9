@@ -18,7 +18,6 @@ type AppProps = {
 }
 
 function App({rentOffersCount, offers, reviews}: AppProps): JSX.Element {
-  const [firstOffer] = offers;
   return (
     <BrowserRouter>
       <Routes>
@@ -32,7 +31,7 @@ function App({rentOffersCount, offers, reviews}: AppProps): JSX.Element {
               </PrivateRoute>
             }
           />
-          <Route path={AppRoute.Room} element={<Room property={firstOffer} offers={offers} offerType={OfferType.NearPlace} reviews={reviews}/>}/>
+          <Route path={AppRoute.Room} element={<Room offers={offers} reviews={reviews}/>}/>
           <Route path="*" element={<NotFound/>}/>
         </Route>
       </Routes>

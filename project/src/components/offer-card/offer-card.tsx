@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom';
 import {Offer} from '../../types/offer';
 import {MAX_RATING, OfferType} from '../../const';
 import {getPercent} from '../../utils';
@@ -40,9 +41,9 @@ function OfferCard(props: OfferCardProps): JSX.Element {
         {offer.isPremium && <span>Premium</span>}
       </div>
       <div className={`${placeCardImageWrapperClassName} place-card__image-wrapper`}>
-        <a href="#">
+        <Link className="header__logo-link" to={`/offer/:${offer.id}`}>
           <img className="place-card__image" src={offer.previewImage} width={placeCardImageWidth} height={placeCardImageHeight} alt="Place image" />
-        </a>
+        </Link>
       </div>
       <div className={`${placeCardInfoClassName} place-card__info`}>
         <div className="place-card__price-wrapper">
@@ -64,7 +65,9 @@ function OfferCard(props: OfferCardProps): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">{offer.title}</a>
+          <Link className="header__logo-link" to={`/offer/:${offer.id}`}>
+            {offer.title}
+          </Link>
         </h2>
         <p className="place-card__type">{offer.type}</p>
       </div>

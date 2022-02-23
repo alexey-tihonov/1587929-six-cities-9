@@ -1,54 +1,47 @@
 import {Fragment} from 'react';
-import {MAX_RATING} from '../../const';
+import {useParams} from 'react-router-dom';
+import {MAX_RATING, OfferType} from '../../const';
 import {getDate, getPercent} from '../../utils';
 import {Offer} from '../../types/offer';
 import {Review} from '../../types/review';
 import OfferCardList from '../../components/offer-card-list/offer-card-list';
+import NotFound from '../../pages/not-found/not-found';
 
 type RoomProps = {
-  property: Offer;
   offers: Offer[];
-  offerType: string;
   reviews: Review[];
 }
 
 function Room(props: RoomProps): JSX.Element {
-  const {property, offers, offerType, reviews} = props;
-  const {host} = property;
+  const {offers, reviews} = props;
+  const {id} = useParams<{ id: string; }>();
+  const property = offers.find((offer: Offer) => offer.id === Number(id));
+
+  if (!property) {
+    return <NotFound/>;
+  }
+  const {bedrooms, images, isPremium, title, rating, type, maxAdults, price, host, description} = property;
 
   return (
     <Fragment>
       <section className="property">
         <div className="property__gallery-container container">
           <div className="property__gallery">
-            <div className="property__image-wrapper">
-              <img className="property__image" src="img/room.jpg" alt="Photo studio"/>
-            </div>
-            <div className="property__image-wrapper">
-              <img className="property__image" src="img/apartment-01.jpg" alt="Photo studio"/>
-            </div>
-            <div className="property__image-wrapper">
-              <img className="property__image" src="img/apartment-02.jpg" alt="Photo studio"/>
-            </div>
-            <div className="property__image-wrapper">
-              <img className="property__image" src="img/apartment-03.jpg" alt="Photo studio"/>
-            </div>
-            <div className="property__image-wrapper">
-              <img className="property__image" src="img/studio-01.jpg" alt="Photo studio"/>
-            </div>
-            <div className="property__image-wrapper">
-              <img className="property__image" src="img/apartment-01.jpg" alt="Photo studio"/>
-            </div>
+            {images.map((image: string) => (
+              <div className="property__image-wrapper" key={`${id}-${image}`}>
+                <img className="property__image" src={image} alt="Photo studio"/>
+              </div>
+            ))}
           </div>
         </div>
         <div className="property__container container">
           <div className="property__wrapper">
             <div className="property__mark">
-              {property.isPremium && <span>Premium</span>}
+              {isPremium && <span>Premium</span>}
             </div>
             <div className="property__name-wrapper">
               <h1 className="property__name">
-                {property.title}
+                {title}
               </h1>
               <button className="property__bookmark-button button" type="button">
                 <svg className="property__bookmark-icon" width="31" height="33">
@@ -59,24 +52,24 @@ function Room(props: RoomProps): JSX.Element {
             </div>
             <div className="property__rating rating">
               <div className="property__stars rating__stars">
-                <span style={{width: `${getPercent(property.rating, MAX_RATING)}%`}}></span>
+                <span style={{width: `${getPercent(rating, MAX_RATING)}%`}}></span>
                 <span className="visually-hidden">Rating</span>
               </div>
-              <span className="property__rating-value rating__value">{property.rating}</span>
+              <span className="property__rating-value rating__value">{rating}</span>
             </div>
             <ul className="property__features">
               <li className="property__feature property__feature--entire">
-                {property.type}
+                {type}
               </li>
               <li className="property__feature property__feature--bedrooms">
-                {property.bedrooms} Bedrooms
+                {bedrooms} Bedrooms
               </li>
               <li className="property__feature property__feature--adults">
-                Max {property.maxAdults} adults
+                Max {maxAdults} adults
               </li>
             </ul>
             <div className="property__price">
-              <b className="property__price-value">&euro;{property.price}</b>
+              <b className="property__price-value">&euro;{price}</b>
               <span className="property__price-text">&nbsp;night</span>
             </div>
             <div className="property__inside">
@@ -125,7 +118,7 @@ function Room(props: RoomProps): JSX.Element {
               </div>
               <div className="property__description">
                 <p className="property__text">
-                  {property.description}
+                  {description}
                 </p>
               </div>
             </div>
@@ -133,8 +126,8 @@ function Room(props: RoomProps): JSX.Element {
               <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
               </h2>
               <ul className="reviews__list">
-                {reviews.map((review, id) => {
-                  const keyValue = id;
+                {reviews.map((review, key) => {
+                  const keyValue = key;
                   const {user} = review;
                   const {dateTime, dateText} = getDate(review.date);
                   return (
@@ -217,7 +210,7 @@ function Room(props: RoomProps): JSX.Element {
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            <OfferCardList offers={offers} offerType={offerType}/>
+            <OfferCardList offers={offers} offerType={OfferType.NearPlace}/>
           </div>
         </section>
       </div>
