@@ -5,9 +5,10 @@ import OfferCardList from '../../components/offer-card-list/offer-card-list';
 type PageMainProps = {
   rentOffersCount: number;
   offers: Offer[];
+  offerType: string;
 }
 
-function Main({rentOffersCount, offers}: PageMainProps): JSX.Element {
+function Main({rentOffersCount, offers, offerType}: PageMainProps): JSX.Element {
   return (
     <Fragment>
       <h1 className="visually-hidden">Cities</h1>
@@ -68,7 +69,7 @@ function Main({rentOffersCount, offers}: PageMainProps): JSX.Element {
               </ul>
             </form>
             <div className="cities__places-list places__list tabs__content">
-              <OfferCardList offers={offers} />
+              <OfferCardList offers={offers} offerType={offerType}/>
             </div>
           </section>
           <div className="cities__right-section">

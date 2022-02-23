@@ -1,24 +1,50 @@
 import {Offer} from '../../types/offer';
-import {MAX_RATING} from '../../const';
+import {MAX_RATING, OfferType} from '../../const';
 import {getPercent} from '../../utils';
 
 type OfferCardProps = {
   offer: Offer;
+  offerType: string,
   onMouseEnterHandler: () => void;
 }
 
-function OfferCard({offer, onMouseEnterHandler}: OfferCardProps): JSX.Element {
+function OfferCard(props: OfferCardProps): JSX.Element {
+  const {offer, offerType, onMouseEnterHandler} = props;
+
+  let placeCardClassName = '';
+  let placeCardInfoClassName = '';
+  let placeCardImageWrapperClassName = '';
+  let placeCardImageWidth = '260';
+  let placeCardImageHeight = '200';
+
+  switch (offerType) {
+    case OfferType.City:
+      placeCardClassName = 'cities__place-card';
+      placeCardImageWrapperClassName = 'cities__image-wrapper';
+      break;
+    case OfferType.Favorite:
+      placeCardClassName = 'favorites__card';
+      placeCardInfoClassName = 'favorites__card-info';
+      placeCardImageWrapperClassName = 'favorites__image-wrapper';
+      placeCardImageWidth = '150';
+      placeCardImageHeight = '110';
+      break;
+    case OfferType.NearPlace:
+      placeCardClassName = 'near-places__card';
+      placeCardImageWrapperClassName = 'near-places__image-wrapper';
+      break;
+  }
   return (
-    <article className="cities__place-card place-card" onMouseEnter={onMouseEnterHandler}>
+    <article className={`${placeCardClassName} place-card`} onMouseEnter={onMouseEnterHandler}>
       <div className="place-card__mark">
         {offer.isPremium && <span>Premium</span>}
       </div>
-      <div className="cities__image-wrapper place-card__image-wrapper">
+      <div className={`${placeCardImageWrapperClassName} place-card__image-wrapper`}>
         <a href="#">
-          <img className="place-card__image" src={offer.previewImage} width="260" height="200" alt="Place image" />
+          <img className="place-card__image" src={offer.previewImage} width={placeCardImageWidth} height={placeCardImageHeight} alt="Place image" />
         </a>
       </div>
-      <div className="place-card__info">
+      <div className={`${placeCardInfoClassName} place-card__info`}>
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
             <b className="place-card__price-value">&euro;{offer.price}</b>

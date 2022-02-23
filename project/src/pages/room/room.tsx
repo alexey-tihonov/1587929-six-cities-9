@@ -1,17 +1,19 @@
 import {Fragment} from 'react';
 import {MAX_RATING} from '../../const';
 import {getDate, getPercent} from '../../utils';
-import PlaceCardOther from '../../components/place-card-other/place-card-other';
 import {Offer} from '../../types/offer';
 import {Review} from '../../types/review';
+import OfferCardList from '../../components/offer-card-list/offer-card-list';
 
 type RoomProps = {
   property: Offer;
+  offers: Offer[];
+  offerType: string;
   reviews: Review[];
 }
 
 function Room(props: RoomProps): JSX.Element {
-  const {property, reviews} = props;
+  const {property, offers, offerType, reviews} = props;
   const {host} = property;
 
   return (
@@ -215,9 +217,7 @@ function Room(props: RoomProps): JSX.Element {
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            <PlaceCardOther/>
-            <PlaceCardOther/>
-            <PlaceCardOther/>
+            <OfferCardList offers={offers} offerType={offerType}/>
           </div>
         </section>
       </div>

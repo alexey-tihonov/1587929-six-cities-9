@@ -4,18 +4,18 @@ import OfferCard from '../../components/offer-card/offer-card';
 
 type OfferCardListProps = {
   offers: Offer[];
+  offerType: string,
 }
 
-function OfferCardList({offers}: OfferCardListProps): JSX.Element {
+function OfferCardList(props: OfferCardListProps): JSX.Element {
+  const {offers, offerType} = props;
   const [firstOffer] = offers;
   const [activeOffer, setActiveOffer] = useState(firstOffer.id);
-  const changeActiveOffer = (currentActiveOffer: number, {id}: Offer) => {
-    setActiveOffer(id);
-  };
+  const changeActiveOffer = (currentActiveOffer: number, {id}: Offer) => setActiveOffer(id);
 
   return (
     <Fragment>
-      {offers.map((offer) => <OfferCard offer={offer} key={offer.id} onMouseEnterHandler={() => changeActiveOffer(activeOffer, offer)} />)}
+      {offers.map((offer) => <OfferCard key={offer.id} offer={offer} offerType={offerType} onMouseEnterHandler={() => changeActiveOffer(activeOffer, offer)} />)}
     </Fragment>
   );
 }

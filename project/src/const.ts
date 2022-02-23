@@ -11,3 +11,9 @@ export enum AuthorizationStatus {
   NoAuth = 'NO_AUTH',
   Unknown = 'UNKNOWN',
 }
+
+export enum OfferType {
+  City = 'cities',
+  Favorite = 'favorites',
+  NearPlace = 'near-places'
+}
