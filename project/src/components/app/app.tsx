@@ -22,7 +22,7 @@ function App({rentOffersCount, offers, reviews}: AppProps): JSX.Element {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Layout/>}>
-          <Route index element={<Main rentOffersCount={rentOffersCount}/>}/>
+          <Route index element={<Main rentOffersCount={rentOffersCount} offers={offers}/>}/>
           <Route path={AppRoute.Login} element={<Login/>}/>
           <Route path={AppRoute.Favorites}
             element={

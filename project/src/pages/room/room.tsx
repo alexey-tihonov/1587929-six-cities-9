@@ -1,17 +1,9 @@
 import {Fragment} from 'react';
 import {MAX_RATING} from '../../const';
+import {getDate, getPercent} from '../../utils';
 import PlaceCardOther from '../../components/place-card-other/place-card-other';
 import {Offer} from '../../types/offer';
 import {Review} from '../../types/review';
-
-const getDate = (dateString: string) => {
-  const date = new Date(dateString);
-  const dateTime = `${date.getFullYear()} ${date.getMonth() + 1} ${date.getDate}`;
-  const dateText = date.toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
-  return {dateTime: dateTime, dateText: dateText};
-};
-
-const getPercent = (partialValue: number, totalValue: number) => (100 * partialValue) / totalValue;
 
 type RoomProps = {
   property: Offer;

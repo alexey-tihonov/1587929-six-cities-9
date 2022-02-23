@@ -1,11 +1,13 @@
 import {Fragment} from 'react';
-import PlaceCardCities from '../../components/place-card-cities/place-card-cities';
+import {Offer} from '../../types/offer';
+import OfferCardList from '../../components/offer-card-list/offer-card-list';
 
 type PageMainProps = {
   rentOffersCount: number;
+  offers: Offer[];
 }
 
-function Main({rentOffersCount}: PageMainProps): JSX.Element {
+function Main({rentOffersCount, offers}: PageMainProps): JSX.Element {
   return (
     <Fragment>
       <h1 className="visually-hidden">Cities</h1>
@@ -66,11 +68,7 @@ function Main({rentOffersCount}: PageMainProps): JSX.Element {
               </ul>
             </form>
             <div className="cities__places-list places__list tabs__content">
-              <PlaceCardCities/>
-              <PlaceCardCities/>
-              <PlaceCardCities/>
-              <PlaceCardCities/>
-              <PlaceCardCities/>
+              <OfferCardList offers={offers} />
             </div>
           </section>
           <div className="cities__right-section">
