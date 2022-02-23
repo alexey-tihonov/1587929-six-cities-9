@@ -4,11 +4,12 @@ import {getPercent} from '../../utils';
 
 type OfferCardProps = {
   offer: Offer;
+  onMouseEnterHandler: () => void;
 }
 
-function OfferCard({offer}: OfferCardProps): JSX.Element {
+function OfferCard({offer, onMouseEnterHandler}: OfferCardProps): JSX.Element {
   return (
-    <article className="cities__place-card place-card">
+    <article className="cities__place-card place-card" onMouseEnter={onMouseEnterHandler}>
       <div className="place-card__mark">
         {offer.isPremium && <span>Premium</span>}
       </div>
