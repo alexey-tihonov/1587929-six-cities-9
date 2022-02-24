@@ -20,7 +20,7 @@ function OfferCardList(props: OfferCardListProps): JSX.Element {
   return (
     <Fragment>
       {offers.map((offer) =>
-        <OfferCard key={offer.id} offer={offer} offerType={offerType} onMouseEnterHandler={() => changeActiveOffer(offer.id)}/>)}
+        <OfferCard key={offer.id} offer={offer} offerType={offerType} onMouseEnterHandle={() => changeActiveOffer(offer.id)}/>)}
     </Fragment>
   );
 }

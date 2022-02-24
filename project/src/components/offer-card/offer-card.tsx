@@ -6,11 +6,11 @@ import {getPercent} from '../../utils';
 type OfferCardProps = {
   offer: Offer;
   offerType: string,
-  onMouseEnterHandler: () => void;
+  onMouseEnterHandle: () => void;
 }
 
 function OfferCard(props: OfferCardProps): JSX.Element {
-  const {offer, offerType, onMouseEnterHandler} = props;
+  const {offer, offerType, onMouseEnterHandle} = props;
 
   let placeCardClassName = '';
   let placeCardInfoClassName = '';
@@ -36,7 +36,7 @@ function OfferCard(props: OfferCardProps): JSX.Element {
       break;
   }
   return (
-    <article className={`${placeCardClassName} place-card`} onMouseEnter={onMouseEnterHandler}>
+    <article className={`${placeCardClassName} place-card`} onMouseEnter={onMouseEnterHandle}>
       <div className="place-card__mark">
         {offer.isPremium && <span>Premium</span>}
       </div>
