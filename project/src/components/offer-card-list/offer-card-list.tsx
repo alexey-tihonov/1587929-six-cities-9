@@ -11,11 +11,16 @@ function OfferCardList(props: OfferCardListProps): JSX.Element {
   const {offers, offerType} = props;
   const [firstOffer] = offers;
   const [activeOffer, setActiveOffer] = useState(firstOffer.id);
-  const changeActiveOffer = (currentActiveOffer: number, {id}: Offer) => setActiveOffer(id);
+  const changeActiveOffer = (id: number) => {
+    if (activeOffer !== id) {
+      setActiveOffer(id);
+    }
+  };
 
   return (
     <Fragment>
-      {offers.map((offer) => <OfferCard key={offer.id} offer={offer} offerType={offerType} onMouseEnterHandler={() => changeActiveOffer(activeOffer, offer)} />)}
+      {offers.map((offer) =>
+        <OfferCard key={offer.id} offer={offer} offerType={offerType} onMouseEnterHandler={() => changeActiveOffer(offer.id)}/>)}
     </Fragment>
   );
 }
