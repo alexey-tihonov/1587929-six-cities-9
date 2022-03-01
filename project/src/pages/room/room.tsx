@@ -139,7 +139,7 @@ function Room(props: RoomProps): JSX.Element {
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            <OfferCardList offers={offers} offerType={OfferType.NearPlace}/>
+            <OfferCardList offers={offers} offerType={OfferType.NearPlace} setActiveOffer={() => false}/>
           </div>
         </section>
       </div>

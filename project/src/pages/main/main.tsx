@@ -1,5 +1,6 @@
-import {Fragment} from 'react';
+import {Fragment, useState} from 'react';
 import {Offer} from '../../types/offer';
+import Map from '../../components/map/map';
 import OfferCardList from '../../components/offer-card-list/offer-card-list';
 
 type PageMainProps = {
@@ -9,6 +10,11 @@ type PageMainProps = {
 }
 
 function Main({rentOffersCount, offers, offerType}: PageMainProps): JSX.Element {
+  const [activeOffer, setActiveOffer] = useState<number | null>(null);
+
+  const [firstOffer] = offers;
+  const city = firstOffer.city;
+
   return (
     <Fragment>
       <h1 className="visually-hidden">Cities</h1>
@@ -69,11 +75,11 @@ function Main({rentOffersCount, offers, offerType}: PageMainProps): JSX.Element 
               </ul>
             </form>
             <div className="cities__places-list places__list tabs__content">
-              <OfferCardList offers={offers} offerType={offerType}/>
+              <OfferCardList offers={offers} offerType={offerType} setActiveOffer={setActiveOffer}/>
             </div>
           </section>
           <div className="cities__right-section">
-            <section className="cities__map map"></section>
+            <Map city={city} offers={offers} activeOffer={activeOffer}/>
           </div>
         </div>
       </div>
