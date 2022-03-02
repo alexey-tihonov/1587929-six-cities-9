@@ -22,7 +22,7 @@ function Favorites(props: FavoritesProps): JSX.Element {
               </div>
             </div>
             <div className="favorites__places">
-              <OfferCardList offers={offers} offerType={offerType}/>
+              <OfferCardList offers={offers} offerType={offerType} setActiveOffer={() => false}/>
             </div>
           </li>
 
@@ -35,7 +35,7 @@ function Favorites(props: FavoritesProps): JSX.Element {
               </div>
             </div>
             <div className="favorites__places">
-              <OfferCardList offers={offers} offerType={offerType}/>
+              <OfferCardList offers={offers} offerType={offerType} setActiveOffer={() => false}/>
             </div>
           </li>
         </ul>
