@@ -39,6 +39,7 @@ function OfferCard(props: OfferCardProps): JSX.Element {
       placeCardImageWrapperClassName = 'near-places__image-wrapper';
       break;
   }
+
   return (
     <article className={`${placeCardClassName} place-card`} onMouseEnter={handleMouseEnter}>
       <div className="place-card__mark">

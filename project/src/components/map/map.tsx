@@ -7,12 +7,13 @@ import {City, Offer} from '../../types/offer';
 import {UrlMapMarker, MapMarker} from '../../const';
 
 type MapProps = {
+  activeOffer: number | null,
   city: City,
+  className: string,
   offers: Offer[],
-  activeOffer: number | null
 };
 
-function Map({city, offers, activeOffer}: MapProps) {
+function Map({activeOffer, className, city, offers}: MapProps) {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
 
@@ -39,7 +40,7 @@ function Map({city, offers, activeOffer}: MapProps) {
   }, [map, activeOffer]);
 
   return (
-    <section className="cities__map map" ref={mapRef}></section>
+    <section className={`${className} map`} ref={mapRef}></section>
   );
 }
 

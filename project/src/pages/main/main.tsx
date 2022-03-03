@@ -79,7 +79,7 @@ function Main({rentOffersCount, offers, offerType}: PageMainProps): JSX.Element 
             </div>
           </section>
           <div className="cities__right-section">
-            <Map city={city} offers={offers} activeOffer={activeOffer}/>
+            <Map activeOffer={activeOffer} city={city} className="cities__map" offers={offers}/>
           </div>
         </div>
       </div>
