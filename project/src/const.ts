@@ -1,5 +1,14 @@
 export const MAX_RATING = 5;
 
+export const cities = [
+  'Paris',
+  'Cologne',
+  'Brussels',
+  'Amsterdam',
+  'Hamburg',
+  'Dusseldorf',
+];
+
 export enum AppRoute {
   Login = '/login',
   Favorites = '/favorites',

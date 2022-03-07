@@ -1,4 +1,3 @@
-import {Fragment} from 'react';
 import {useParams} from 'react-router-dom';
 import {MAX_RATING, OfferType} from '../../const';
 import {getPercent} from '../../utils';
@@ -24,10 +23,10 @@ function Room(props: RoomProps): JSX.Element {
   if (!property) {
     return <NotFound/>;
   }
-  const {bedrooms, city, images, isPremium, title, rating, type, maxAdults, price, host, description} = property;
+  const {bedrooms, images, isPremium, title, rating, type, maxAdults, price, host, description} = property;
 
   return (
-    <Fragment>
+    <>
       <section className="property">
         <div className="property__gallery-container container">
           <div className="property__gallery">
@@ -136,7 +135,7 @@ function Room(props: RoomProps): JSX.Element {
           </div>
         </div>
         <section className="property__map map">
-          <Map activeOffer={propertyId} city={city} className="property__map" offers={offers}/>
+          <Map activeOffer={propertyId} className="property__map" offers={offers}/>
         </section>
       </section>
       <div className="container">
@@ -147,7 +146,7 @@ function Room(props: RoomProps): JSX.Element {
           </div>
         </section>
       </div>
-    </Fragment>
+    </>
   );
 }
 

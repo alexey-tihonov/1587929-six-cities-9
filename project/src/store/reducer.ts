@@ -1,19 +1,20 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {City, Offer} from '../types/offer';
+import {Offer} from '../types/offer';
 import {changeCity, fillOffers} from './action';
+import {cities} from '../const';
 
 const initialState = {
-  city: {} as City,
+  activeCity: cities[0],
   offers: [] as Offer[],
 };
 
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(changeCity, (state, action) => {
-      state.city = action.payload;
+      state.activeCity = action.payload;
     })
     .addCase(fillOffers, (state, action) => {
-      action.payload.forEach((offer) => state.offers.push(offer));
+      state.offers = action.payload;
     });
 });
 

@@ -1,3 +1,5 @@
+import {Offer} from './types/offer';
+
 export const getDate = (dateString: string) => {
   const date = new Date(dateString);
   const dateTime = date.toISOString().split('T')[0];
@@ -6,3 +8,5 @@ export const getDate = (dateString: string) => {
 };
 
 export const getPercent = (partialValue: number, totalValue: number) => (100 * partialValue) / totalValue;
+
+export const getOffers = (city: string, offers: Offer[]) => offers.filter((offer) => offer.city.name === city);
