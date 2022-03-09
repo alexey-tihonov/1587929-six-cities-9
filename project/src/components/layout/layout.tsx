@@ -1,10 +1,9 @@
-import {Fragment} from 'react';
 import {Link, Outlet} from 'react-router-dom';
 import Icons from '../icons/icons';
 
 function Layout(): JSX.Element {
   return (
-    <Fragment>
+    <>
       <Icons/>
       <div className="page page--gray page--main">
         <header className="header">
@@ -29,7 +28,7 @@ function Layout(): JSX.Element {
           </Link>
         </footer>
       </div>
-    </Fragment>);
+    </>);
 }
 
 export default Layout;

@@ -3,17 +3,18 @@ import {Marker} from 'leaflet';
 import useMap from '../../hooks/useMap';
 import leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import {City, Offer} from '../../types/offer';
+import {Offer} from '../../types/offer';
 import {UrlMapMarker, MapMarker} from '../../const';
 
 type MapProps = {
   activeOffer: number | null,
-  city: City,
   className: string,
   offers: Offer[],
 };
 
-function Map({activeOffer, className, city, offers}: MapProps) {
+function Map({activeOffer, className, offers}: MapProps) {
+  const [firstOffer] = offers;
+  const {city} = firstOffer;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
 
