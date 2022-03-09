@@ -1,3 +1,4 @@
+import {SortType} from './const';
 import {Offer} from './types/offer';
 
 export const getDate = (dateString: string) => {
@@ -10,3 +11,17 @@ export const getDate = (dateString: string) => {
 export const getPercent = (partialValue: number, totalValue: number) => (100 * partialValue) / totalValue;
 
 export const getOffers = (city: string, offers: Offer[]) => offers.filter((offer) => offer.city.name === city);
+
+export const sortOffers = (sort: string, offers: Offer[]) => {
+  switch (sort) {
+    case SortType.PriceLowToHigh:
+      return offers.sort((prev, next) => prev.price - next.price);
+    case SortType.PriceHighToLow:
+      return offers.sort((prev, next) => next.price - prev.price);
+    case SortType.TopRatedFirst:
+      return offers.sort((prev, next) => next.rating - prev.rating);
+    case SortType.Default:
+    default:
+      return offers;
+  }
+};

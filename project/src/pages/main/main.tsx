@@ -1,12 +1,13 @@
 import {useEffect, useState} from 'react';
-import {cities} from '../../const';
+import {cities, SortType} from '../../const';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {fillOffersAction} from '../../store/action';
+import {allOffers} from '../../mocks/offers';
+import {getOffers, sortOffers} from '../../utils';
+import CityList from '../../components/city-list/city-list';
 import Map from '../../components/map/map';
 import OfferCardList from '../../components/offer-card-list/offer-card-list';
-import CityList from '../../components/city-list/city-list';
-import {useAppDispatch, useAppSelector} from '../../hooks';
-import {fillOffers} from '../../store/action';
-import {allOffers} from '../../mocks/offers';
-import {getOffers} from '../../utils';
+import Sort from '../../components/sort/sort';
 
 type PageMainProps = {
   offerType: string;
@@ -16,12 +17,21 @@ function Main({offerType}: PageMainProps): JSX.Element {
   const dispatch = useAppDispatch();
   const {activeCity, offers} = useAppSelector((state) => state);
   const [activeOffer, setActiveOffer] = useState<number | null>(null);
-
+  const [sort, setSort] = useState(SortType.Default.toString());
   const isExistOffers = (offers.length > 0);
+  let currentOffers = getOffers(activeCity, allOffers);
 
   useEffect(() => {
-    dispatch(fillOffers(getOffers(activeCity, allOffers)));
+    currentOffers = getOffers(activeCity, allOffers);
+    setSort(SortType.Default);
+    dispatch(fillOffersAction(currentOffers));
   }, [activeCity]);
+
+  useEffect(() => {
+    if (isExistOffers) {
+      dispatch(fillOffersAction(sortOffers(sort, currentOffers)));
+    }
+  }, [sort]);
 
   return (
     <>
@@ -36,21 +46,7 @@ function Main({offerType}: PageMainProps): JSX.Element {
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
                 <b className="places__found">{offers.length} places to stay in Amsterdam</b>
-                <form className="places__sorting" action="#" method="get">
-                  <span className="places__sorting-caption">Sort by</span>
-                  <span className="places__sorting-type" tabIndex={0}>
-                    Popular
-                    <svg className="places__sorting-arrow" width="7" height="4">
-                      <use xlinkHref="#icon-arrow-select"></use>
-                    </svg>
-                  </span>
-                  <ul className="places__options places__options--custom places__options--opened">
-                    <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-                    <li className="places__option" tabIndex={0}>Price: low to high</li>
-                    <li className="places__option" tabIndex={0}>Price: high to low</li>
-                    <li className="places__option" tabIndex={0}>Top rated first</li>
-                  </ul>
-                </form>
+                <Sort sort={sort} setSort={setSort}/>
                 <div className="cities__places-list places__list tabs__content">
                   <OfferCardList offers={offers} offerType={offerType} setActiveOffer={setActiveOffer}/>
                 </div>

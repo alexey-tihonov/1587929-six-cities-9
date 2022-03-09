@@ -3,9 +3,9 @@ import {Offer} from '../../types/offer';
 import OfferCard from '../../components/offer-card/offer-card';
 
 type OfferCardListProps = {
-  offers: Offer[];
+  offers: Offer[],
   offerType: string,
-  setActiveOffer: (id: number) => void;
+  setActiveOffer: (id: number) => void,
 }
 
 function OfferCardList(props: OfferCardListProps): JSX.Element {
