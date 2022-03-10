@@ -1,4 +1,4 @@
-import {changeCity} from '../../store/action';
+import {changeCityAction} from '../../store/action';
 import {useAppSelector, useAppDispatch} from '../../hooks';
 
 type CityProps = {
@@ -11,7 +11,7 @@ function City({city}: CityProps) {
 
   return (
     <li className="locations__item">
-      <a className={`locations__item-link tabs__item${activeCity === city ? ' tabs__item--active' : ''}`} onClick={() => dispatch(changeCity(city))}>
+      <a className={`locations__item-link tabs__item${activeCity === city ? ' tabs__item--active' : ''}`} onClick={() => dispatch(changeCityAction(city))}>
         <span>{city}</span>
       </a>
     </li>

@@ -27,6 +27,13 @@ export enum OfferType {
   NearPlace = 'near-places'
 }
 
+export enum SortType {
+  Default = 'Popular',
+  PriceLowToHigh = 'Price: low to high',
+  PriceHighToLow = 'Price: high to low',
+  TopRatedFirst = 'Top rated first',
+}
+
 export enum UrlMapMarker {
   Default = './img/pin.svg',
   Active = './img/pin-active.svg',
