@@ -9,12 +9,13 @@ import NotFound from '../../pages/not-found/not-found';
 import Login from '../../pages/login/login';
 import Favorites from '../../pages/favorites/favorites';
 import Room from '../../pages/room/room';
+import Preloader from '../preloader/preloader';
 
-function App(): JSX.Element | null {
+function App(): JSX.Element {
   const {isDataLoaded, data} = useAppSelector((state) => state);
 
   if (!isDataLoaded) {
-    return null;
+    return <Preloader/>;
   }
 
   return (
