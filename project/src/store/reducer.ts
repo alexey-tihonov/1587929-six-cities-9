@@ -1,11 +1,13 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {Offer} from '../types/offer';
-import {changeCityAction, fillOffersAction, loadOffers} from './action';
+import {changeCityAction, fillOffersAction, loadDataAction} from './action';
 import {cities} from '../const';
 
 const initialState = {
   activeCity: cities[0],
   offers: [] as Offer[],
+  data: [] as Offer[],
+  isDataLoaded: false,
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -16,8 +18,9 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(fillOffersAction, (state, action) => {
       state.offers = action.payload;
     })
-    .addCase(loadOffers, (state, action) => {
-      state.offers = action.payload;
+    .addCase(loadDataAction, (state, action) => {
+      state.data = action.payload;
+      state.isDataLoaded = true;
     });
 });
 
