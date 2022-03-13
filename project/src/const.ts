@@ -43,3 +43,9 @@ export enum MapMarker {
   Width = 27,
   Height = 39,
 }
+
+export enum APIRoute {
+  Offers = '/hotels',
+  Login = '/login',
+  Logout = '/logout',
+}

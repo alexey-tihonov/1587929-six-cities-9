@@ -2,17 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import App from './components/app/app';
-import {allOffers} from './mocks/offers';
-import {reviews} from './mocks/reviews';
 import {store} from './store';
+import {fetchDataAction} from './store/api-actions';
+
+store.dispatch(fetchDataAction());
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store = {store}>
-      <App
-        offers = {allOffers}
-        reviews = {reviews}
-      />
+      <App/>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'));
