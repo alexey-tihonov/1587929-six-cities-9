@@ -1,4 +1,4 @@
-import {SortType} from './const';
+import {AuthorizationStatus, SortType} from './const';
 import {Offer} from './types/offer';
 
 export const getDate = (dateString: string) => {
@@ -25,3 +25,6 @@ export const sortOffers = (sort: string, offers: Offer[]) => {
       return offers;
   }
 };
+
+export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Unknown;
+export const isAuth = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Auth;
