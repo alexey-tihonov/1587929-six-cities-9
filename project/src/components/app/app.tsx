@@ -1,6 +1,6 @@
 import React from 'react';
-import {Route, BrowserRouter, Routes} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus, OfferType} from '../../const';
+import {Route, Routes} from 'react-router-dom';
+import {AppRoute, OfferType} from '../../const';
 import {useAppSelector} from '../../hooks';
 import PrivateRoute from '../private-route/private-route';
 import Layout from '../layout/layout';
@@ -10,23 +10,26 @@ import Login from '../../pages/login/login';
 import Favorites from '../../pages/favorites/favorites';
 import Room from '../../pages/room/room';
 import Preloader from '../preloader/preloader';
+import HistoryRouter from '../history-route/history-route';
+import {isCheckedAuth} from '../../utils';
+import browserHistory from '../../browser-history';
 
 function App(): JSX.Element {
-  const {isDataLoaded, data} = useAppSelector((state) => state);
+  const {authorizationStatus, isDataLoaded, data} = useAppSelector((state) => state);
 
-  if (!isDataLoaded) {
+  if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
     return <Preloader/>;
   }
 
   return (
-    <BrowserRouter>
+    <HistoryRouter history={browserHistory}>
       <Routes>
-        <Route path='/' element={<Layout/>}>
+        <Route path={AppRoute.Root} element={<Layout/>}>
           <Route index element={<Main offerType={OfferType.City}/>}/>
           <Route path={AppRoute.Login} element={<Login/>}/>
           <Route path={AppRoute.Favorites}
             element={
-              <PrivateRoute authorizationStatus={AuthorizationStatus.NoAuth}>
+              <PrivateRoute authorizationStatus={authorizationStatus}>
                 <Favorites offers={data} offerType={OfferType.Favorite}/>
               </PrivateRoute>
             }
@@ -35,8 +38,7 @@ function App(): JSX.Element {
           <Route path="*" element={<NotFound/>}/>
         </Route>
       </Routes>
-    </BrowserRouter>
-
+    </HistoryRouter>
   );
 }
 

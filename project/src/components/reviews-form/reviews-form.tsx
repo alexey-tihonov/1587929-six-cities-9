@@ -1,11 +1,11 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useState} from 'react';
 
 function ReviewsForm(): JSX.Element {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
   const isSubmitAvailable = rating >= 1 && rating <= 5 && comment.length >= 50 && comment.length <= 300;
-  const hendleFormSubmit = (evt: { preventDefault: () => void; }) => {
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     return isSubmitAvailable;
   };
@@ -13,7 +13,7 @@ function ReviewsForm(): JSX.Element {
   const handleCommentChange = ({target}: ChangeEvent<HTMLTextAreaElement>) => setComment(target.value);
 
   return (
-    <form className="reviews__form form" onSubmit={hendleFormSubmit}>
+    <form className="reviews__form form" onSubmit={handleFormSubmit}>
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
         <input onChange={handleRatingChange} className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio"/>
@@ -51,7 +51,14 @@ function ReviewsForm(): JSX.Element {
           </svg>
         </label>
       </div>
-      <textarea onChange={handleCommentChange} className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved"></textarea>
+      <textarea
+        onChange={handleCommentChange}
+        className="reviews__textarea form__textarea"
+        id="review"
+        name="review"
+        placeholder="Tell how was your stay, what you like and what can be improved"
+      >
+      </textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and
