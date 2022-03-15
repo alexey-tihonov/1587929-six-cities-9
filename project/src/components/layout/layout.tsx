@@ -26,12 +26,12 @@ function Layout(): JSX.Element {
                   <li className="header__nav-item user">
                     {
                       isAuth(authorizationStatus) ?
-                        <Link className="header__nav-link header__nav-link--profile" to='/favorites'>
+                        <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
                           <div className="header__avatar-wrapper user__avatar-wrapper">
                           </div>
                           <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
                         </Link> :
-                        <Link className="header__nav-link header__nav-link--profile" to='/login'>
+                        <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Login}>
                           <div className="header__avatar-wrapper user__avatar-wrapper">
                           </div>
                           <span className="header__login">Sign in</span>
