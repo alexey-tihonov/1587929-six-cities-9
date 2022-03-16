@@ -7,5 +7,6 @@ export const changeCityAction = createAction<string>('app/changeCity');
 export const fillOffersAction = createAction<Offer[]>('app/fillOffers');
 export const loadDataAction = createAction<Offer[]>('data/loadData');
 export const loadReviewsAction = createAction<Review[]>('data/loadReviews');
+export const loadNearbyOffersAction = createAction<Offer[]>('data/loadNearbyOffers');
 export const redirectToRouteAction = createAction<AppRoute>('app/redirectToRoute');
 export const requireAuthorizationAction = createAction<AuthorizationStatus>('user/requireAuthorization');

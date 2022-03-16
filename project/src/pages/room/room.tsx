@@ -9,7 +9,7 @@ import ReviewsList from '../../components/reviews-list/reviews-list';
 import ReviewsForm from '../../components/reviews-form/reviews-form';
 import Map from '../../components/map/map';
 import {store} from '../../store';
-import {fetchReviewsAction} from '../../store/api-actions';
+import {fetchNearbyOffersAction, fetchReviewsAction} from '../../store/api-actions';
 import {useAppSelector} from '../../hooks';
 
 type RoomProps = {
@@ -23,10 +23,11 @@ function Room(props: RoomProps): JSX.Element {
   const property = offers.find((offer: Offer) => offer.id === propertyId);
 
   useEffect(() => {
+    store.dispatch(fetchNearbyOffersAction(propertyId));
     store.dispatch(fetchReviewsAction(propertyId));
   }, [propertyId]);
 
-  const {reviews} = useAppSelector((state) => state);
+  const {nearbyOffers, reviews} = useAppSelector((state) => state);
 
   if (!property) {
     return <NotFound/>;
@@ -151,7 +152,7 @@ function Room(props: RoomProps): JSX.Element {
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            <OfferCardList offers={offers} offerType={OfferType.NearPlace} setActiveOffer={() => false}/>
+            <OfferCardList offers={nearbyOffers} offerType={OfferType.NearPlace} setActiveOffer={() => false}/>
           </div>
         </section>
       </div>
