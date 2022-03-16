@@ -1,4 +1,4 @@
-import {Link, Outlet} from 'react-router-dom';
+import {Link, Outlet, useLocation} from 'react-router-dom';
 import Icons from '../icons/icons';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {isAuth} from '../../utils';
@@ -6,13 +6,14 @@ import {AppRoute} from '../../const';
 import {logoutAction} from '../../store/api-actions';
 
 function Layout(): JSX.Element {
+  const location = useLocation();
   const {authorizationStatus} = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
 
   return (
     <>
       <Icons/>
-      <div className="page page--gray page--main">
+      <div className={`page page--gray${location.pathname === AppRoute.Root ? 'page--main' : ''}`}>
         <header className="header">
           <div className="container">
             <div className="header__wrapper">
