@@ -29,9 +29,9 @@ export const fetchDataAction = createAsyncThunk(
 
 export const fetchNearbyOffersAction = createAsyncThunk(
   'data/fetchNearbyOffers',
-  async (id: number) => {
+  async (offerId: number) => {
     try {
-      const {data} = await api.get<Offer[]>(`${APIRoute.Offers}/${id.toString()}/nearby`);
+      const {data} = await api.get<Offer[]>(`${APIRoute.Offers}/${offerId.toString()}/nearby`);
       store.dispatch(loadNearbyOffersAction(data));
     } catch (error) {
       errorHandle(error);
@@ -41,10 +41,22 @@ export const fetchNearbyOffersAction = createAsyncThunk(
 
 export const fetchReviewsAction = createAsyncThunk(
   'data/fetchReviews',
-  async (id: number) => {
+  async (offerId: number) => {
     try {
-      const {data} = await api.get<Review[]>(`${APIRoute.Comments}/${id.toString()}`);
+      const {data} = await api.get<Review[]>(`${APIRoute.Comments}/${offerId.toString()}`);
       store.dispatch(loadReviewsAction(data));
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
+export const postReviewsAction = createAsyncThunk(
+  'data/postReviews',
+  async (params: {data: {comment: string, rating: number}, offerId: number }) => {
+    try {
+      const {data, offerId} = params;
+      await api.post<Review[]>(`${APIRoute.Comments}/${offerId.toString()}`, data);
     } catch (error) {
       errorHandle(error);
     }
