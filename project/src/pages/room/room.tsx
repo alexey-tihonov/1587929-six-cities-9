@@ -1,28 +1,37 @@
 import {useParams} from 'react-router-dom';
+import {useEffect} from 'react';
 import {MAX_RATING, OfferType} from '../../const';
 import {getPercent} from '../../utils';
 import {Offer} from '../../types/offer';
-import {Review} from '../../types/review';
 import OfferCardList from '../../components/offer-card-list/offer-card-list';
 import NotFound from '../../pages/not-found/not-found';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import ReviewsForm from '../../components/reviews-form/reviews-form';
 import Map from '../../components/map/map';
+import {store} from '../../store';
+import {fetchReviewsAction} from '../../store/api-actions';
+import {useAppSelector} from '../../hooks';
 
 type RoomProps = {
-  offers: Offer[];
-  reviews: Review[];
+  offers: Offer[],
 }
 
 function Room(props: RoomProps): JSX.Element {
-  const {offers, reviews} = props;
+  const {offers} = props;
   const {id} = useParams<{ id: string; }>();
   const propertyId = Number(id);
   const property = offers.find((offer: Offer) => offer.id === propertyId);
 
+  useEffect(() => {
+    store.dispatch(fetchReviewsAction(propertyId));
+  }, [propertyId]);
+
+  const {reviews} = useAppSelector((state) => state);
+
   if (!property) {
     return <NotFound/>;
   }
+
   const {bedrooms, images, isPremium, title, rating, type, maxAdults, price, host, description} = property;
 
   return (

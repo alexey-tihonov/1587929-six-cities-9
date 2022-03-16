@@ -34,7 +34,7 @@ function App(): JSX.Element {
               </PrivateRoute>
             }
           />
-          <Route path={AppRoute.Room} element={<Room offers={data} reviews={[]}/>}/>
+          <Route path={AppRoute.Room} element={<Room offers={data}/>}/>
           <Route path="*" element={<NotFound/>}/>
         </Route>
       </Routes>
