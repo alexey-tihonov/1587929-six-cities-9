@@ -1,9 +1,16 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {api, store} from './index';
-import {loadDataAction, requireAuthorizationAction, redirectToRouteAction} from './action';
+import {
+  loadDataAction,
+  loadReviewsAction,
+  requireAuthorizationAction,
+  redirectToRouteAction,
+  loadNearbyOffersAction
+} from './action';
 import {errorHandle} from '../services/error-handle';
 import {APIRoute, AppRoute, AuthorizationStatus} from '../const';
 import {Offer} from '../types/offer';
+import {Review} from '../types/review';
 import {AuthData} from '../types/auth-data';
 import {UserData} from '../types/user-data';
 import {saveToken, dropToken} from '../services/token';
@@ -14,6 +21,42 @@ export const fetchDataAction = createAsyncThunk(
     try {
       const {data} = await api.get<Offer[]>(APIRoute.Offers);
       store.dispatch(loadDataAction(data));
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
+export const fetchNearbyOffersAction = createAsyncThunk(
+  'data/fetchNearbyOffers',
+  async (offerId: number) => {
+    try {
+      const {data} = await api.get<Offer[]>(`${APIRoute.Offers}/${offerId.toString()}/nearby`);
+      store.dispatch(loadNearbyOffersAction(data));
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
+export const fetchReviewsAction = createAsyncThunk(
+  'data/fetchReviews',
+  async (offerId: number) => {
+    try {
+      const {data} = await api.get<Review[]>(`${APIRoute.Comments}/${offerId.toString()}`);
+      store.dispatch(loadReviewsAction(data));
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
+export const postReviewsAction = createAsyncThunk(
+  'data/postReviews',
+  async (params: {data: {comment: string, rating: number}, offerId: number }) => {
+    try {
+      const {data, offerId} = params;
+      await api.post<Review[]>(`${APIRoute.Comments}/${offerId.toString()}`, data);
     } catch (error) {
       errorHandle(error);
     }

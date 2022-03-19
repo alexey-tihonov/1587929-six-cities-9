@@ -1,16 +1,33 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
+import {store} from '../../store';
+import {postReviewsAction} from '../../store/api-actions';
 
-function ReviewsForm(): JSX.Element {
+type ReviewsFormProps = {
+  offerId: number,
+}
+
+function ReviewsForm(props: ReviewsFormProps): JSX.Element {
+  const {offerId} = props;
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const isSubmitAvailable = rating >= 1 && rating <= 5 && comment.length >= 50 && comment.length <= 300;
+
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    return isSubmitAvailable;
+    const data = {comment, rating};
+    store.dispatch(postReviewsAction({data, offerId}));
+    setIsSubmitted(true);
   };
   const handleRatingChange = ({target}: ChangeEvent<HTMLInputElement>) => setRating(Number(target.value));
   const handleCommentChange = ({target}: ChangeEvent<HTMLTextAreaElement>) => setComment(target.value);
+
+  if (isSubmitted) {
+    return (
+      <p>Thank you for your feedback</p>
+    );
+  }
 
   return (
     <form className="reviews__form form" onSubmit={handleFormSubmit}>
@@ -64,7 +81,7 @@ function ReviewsForm(): JSX.Element {
           To submit review please make sure to set <span className="reviews__star">rating</span> and
           describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled>Submit</button>
+        <button className="reviews__submit form__submit button" type="submit" disabled={!isSubmitAvailable}>Submit</button>
       </div>
     </form>
   );
