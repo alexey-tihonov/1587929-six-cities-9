@@ -15,7 +15,8 @@ import {isCheckedAuth} from '../../utils';
 import browserHistory from '../../browser-history';
 
 function App(): JSX.Element {
-  const {authorizationStatus, isDataLoaded, data} = useAppSelector((state) => state);
+  const {authorizationStatus} = useAppSelector(({USER}) => USER);
+  const {data, isDataLoaded} = useAppSelector(({DATA}) => DATA);
 
   if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
     return <Preloader/>;

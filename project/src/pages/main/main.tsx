@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {cities, SortType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {fillOffersAction} from '../../store/action';
+import {fillOffers} from '../../store/app-process/app-process';
 import {getOffers, sortOffers} from '../../utils';
 import CityList from '../../components/city-list/city-list';
 import Map from '../../components/map/map';
@@ -14,7 +14,8 @@ type PageMainProps = {
 
 function Main({offerType}: PageMainProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const {activeCity, offers, data} = useAppSelector((state) => state);
+  const {data} = useAppSelector(({DATA}) => DATA);
+  const {activeCity, offers} = useAppSelector(({APP}) => APP);
   const [activeOffer, setActiveOffer] = useState<number | null>(null);
   const [sort, setSort] = useState(SortType.Default.toString());
   const isExistOffers = (offers.length > 0);
@@ -23,12 +24,12 @@ function Main({offerType}: PageMainProps): JSX.Element {
   useEffect(() => {
     currentOffers = getOffers(activeCity, data);
     setSort(SortType.Default);
-    dispatch(fillOffersAction(currentOffers));
+    dispatch(fillOffers(currentOffers));
   }, [activeCity]);
 
   useEffect(() => {
     if (isExistOffers) {
-      dispatch(fillOffersAction(sortOffers(sort, currentOffers)));
+      dispatch(fillOffers(sortOffers(sort, currentOffers)));
     }
   }, [sort]);
 

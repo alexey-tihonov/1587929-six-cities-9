@@ -7,7 +7,8 @@ import {logoutAction} from '../../store/api-actions';
 
 function Layout(): JSX.Element {
   const location = useLocation();
-  const {authorizationStatus} = useAppSelector((state) => state);
+
+  const {authorizationStatus} = useAppSelector(({USER}) => USER);
   const dispatch = useAppDispatch();
 
   return (

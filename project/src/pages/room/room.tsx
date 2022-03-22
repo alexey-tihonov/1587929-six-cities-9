@@ -27,7 +27,8 @@ function Room(props: RoomProps): JSX.Element {
     store.dispatch(fetchReviewsAction(propertyId));
   }, [propertyId]);
 
-  const {nearbyOffers, reviews} = useAppSelector((state) => state);
+
+  const {nearbyOffers, reviews} = useAppSelector(({DATA}) => DATA);
 
   if (!property) {
     return <NotFound/>;

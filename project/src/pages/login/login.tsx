@@ -7,7 +7,7 @@ import {AuthorizationStatus} from '../../const';
 function Login(): JSX.Element {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const {authorizationStatus} = useAppSelector((state) => state);
+  const {authorizationStatus} = useAppSelector(({USER}) => USER);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

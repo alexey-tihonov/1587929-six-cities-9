@@ -57,3 +57,9 @@ export enum MapMarker {
   Width = 27,
   Height = 39,
 }
+
+export enum NameSpace {
+  app = 'APP',
+  data = 'DATA',
+  user = 'USER',
+}
