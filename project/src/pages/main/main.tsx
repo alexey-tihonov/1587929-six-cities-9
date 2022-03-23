@@ -2,6 +2,8 @@ import {useEffect, useState} from 'react';
 import {cities, SortType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fillOffers} from '../../store/app-process/app-process';
+import {getData} from '../../store/app-data/selectors';
+import {getActiveCity, getCurrentOffers} from '../../store/app-process/selectors';
 import {getOffers, sortOffers} from '../../utils';
 import CityList from '../../components/city-list/city-list';
 import Map from '../../components/map/map';
@@ -13,9 +15,11 @@ type PageMainProps = {
 }
 
 function Main({offerType}: PageMainProps): JSX.Element {
+  const activeCity = useAppSelector(getActiveCity);
+  const data = useAppSelector(getData);
+  const offers = useAppSelector(getCurrentOffers);
   const dispatch = useAppDispatch();
-  const {data} = useAppSelector(({DATA}) => DATA);
-  const {activeCity, offers} = useAppSelector(({APP}) => APP);
+
   const [activeOffer, setActiveOffer] = useState<number | null>(null);
   const [sort, setSort] = useState(SortType.Default.toString());
   const isExistOffers = (offers.length > 0);
@@ -45,7 +49,7 @@ function Main({offerType}: PageMainProps): JSX.Element {
             <>
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
-                <b className="places__found">{offers.length} places to stay in Amsterdam</b>
+                <b className="places__found">{currentOffers.length} places to stay in Amsterdam</b>
                 <Sort sort={sort} setSort={setSort}/>
                 <div className="cities__places-list places__list tabs__content">
                   <OfferCardList offers={offers} offerType={offerType} setActiveOffer={setActiveOffer}/>

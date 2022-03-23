@@ -3,13 +3,15 @@ import {useNavigate} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {loginAction} from '../../store/api-actions';
 import {AuthorizationStatus} from '../../const';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
 function Login(): JSX.Element {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const {authorizationStatus} = useAppSelector(({USER}) => USER);
 
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
+
   const navigate = useNavigate();
 
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {

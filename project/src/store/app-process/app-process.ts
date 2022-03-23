@@ -5,7 +5,7 @@ import {Offer} from '../../types/offer';
 
 const initialState: AppProcess = {
   activeCity: cities[0],
-  offers: [] as Offer[],
+  currentOffers: [] as Offer[],
 };
 
 export const appProcess = createSlice({
@@ -16,7 +16,7 @@ export const appProcess = createSlice({
       state.activeCity = action.payload;
     },
     fillOffers: (state, action) => {
-      state.offers = action.payload;
+      state.currentOffers = action.payload;
     },
   },
 });

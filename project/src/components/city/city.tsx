@@ -1,12 +1,13 @@
-import {useAppSelector, useAppDispatch} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {changeCity} from '../../store/app-process/app-process';
+import {getActiveCity} from '../../store/app-process/selectors';
 
 type CityProps = {
   city: string
 }
 
 function City({city}: CityProps) {
-  const {activeCity} = useAppSelector(({APP}) => APP);
+  const activeCity = useAppSelector(getActiveCity);
   const dispatch = useAppDispatch();
 
   return (

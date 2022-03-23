@@ -1,6 +1,7 @@
 import {useParams} from 'react-router-dom';
 import {useEffect} from 'react';
 import {MAX_RATING, OfferType} from '../../const';
+import {useAppSelector} from '../../hooks';
 import {getPercent} from '../../utils';
 import {Offer} from '../../types/offer';
 import OfferCardList from '../../components/offer-card-list/offer-card-list';
@@ -10,7 +11,7 @@ import ReviewsForm from '../../components/reviews-form/reviews-form';
 import Map from '../../components/map/map';
 import {store} from '../../store';
 import {fetchNearbyOffersAction, fetchReviewsAction} from '../../store/api-actions';
-import {useAppSelector} from '../../hooks';
+import {getNearbyOffers, getReviews} from '../../store/app-data/selectors';
 
 type RoomProps = {
   offers: Offer[],
@@ -27,8 +28,8 @@ function Room(props: RoomProps): JSX.Element {
     store.dispatch(fetchReviewsAction(propertyId));
   }, [propertyId]);
 
-
-  const {nearbyOffers, reviews} = useAppSelector(({DATA}) => DATA);
+  const nearbyOffers = useAppSelector(getNearbyOffers);
+  const reviews = useAppSelector(getReviews);
 
   if (!property) {
     return <NotFound/>;

@@ -12,7 +12,7 @@ export type AppData = {
 
 export type AppProcess = {
   activeCity: string,
-  offers: Offer[],
+  currentOffers: Offer[],
 };
 
 export type UserProcess = {

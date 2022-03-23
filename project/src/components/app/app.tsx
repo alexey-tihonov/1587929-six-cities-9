@@ -2,6 +2,8 @@ import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {AppRoute, OfferType} from '../../const';
 import {useAppSelector} from '../../hooks';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import {getData, getLoadedDataStatus} from '../../store/app-data/selectors';
 import PrivateRoute from '../private-route/private-route';
 import Layout from '../layout/layout';
 import Main from '../../pages/main/main';
@@ -15,8 +17,9 @@ import {isCheckedAuth} from '../../utils';
 import browserHistory from '../../browser-history';
 
 function App(): JSX.Element {
-  const {authorizationStatus} = useAppSelector(({USER}) => USER);
-  const {data, isDataLoaded} = useAppSelector(({DATA}) => DATA);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const data = useAppSelector(getData);
+  const isDataLoaded = useAppSelector(getLoadedDataStatus);
 
   if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
     return <Preloader/>;

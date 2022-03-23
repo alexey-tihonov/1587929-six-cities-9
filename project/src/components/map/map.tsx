@@ -38,7 +38,7 @@ function Map({activeOffer, className, offers}: MapProps) {
           .addTo(map);
       });
     }
-  }, [map, activeOffer]);
+  }, [map, activeOffer, offers]);
 
   return (
     <section className={`${className} map`} ref={mapRef}></section>
