@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchFavoriteOffersAction} from '../../store/api-actions';
 import {getFavoriteOffers} from '../../store/app-data/selectors';
+import {changeCity} from '../../store/app-process/app-process';
 import {AppRoute, cities, OfferType} from '../../const';
 import {getOffers} from '../../utils';
 import OfferCardList from '../../components/offer-card-list/offer-card-list';
@@ -34,6 +35,7 @@ function Favorites(): JSX.Element {
                             <Link
                               className="locations__item-link"
                               to={AppRoute.Root}
+                              onClick={() => dispatch(changeCity(city))}
                             >
                               <span>{city}</span>
                             </Link>

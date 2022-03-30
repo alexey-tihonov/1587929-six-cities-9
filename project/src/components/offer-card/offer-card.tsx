@@ -4,7 +4,7 @@ import {Offer} from '../../types/offer';
 import {AppRoute, AuthorizationStatus, MAX_RATING, OfferType} from '../../const';
 import {getPercent} from '../../utils';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {setIsFavoriteAction} from '../../store/api-actions';
+import {fetchFavoriteOffersAction, setIsFavoriteAction} from '../../store/api-actions';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import {redirectToRoute} from '../../store/action';
 
@@ -25,16 +25,18 @@ function OfferCard(props: OfferCardProps): JSX.Element {
     setActiveOffer(offer.id);
   };
 
-  const handleAddToFavorites = (evt: MouseEvent): void => {
+  const handleAddToFavorites = async (evt: MouseEvent) => {
     evt.preventDefault();
 
     if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(setIsFavoriteAction({
+      await dispatch(setIsFavoriteAction({
         offerId: offer.id,
         isFavorite: !isFavorite,
       }));
 
       setIsFavorite(!isFavorite);
+
+      await dispatch(fetchFavoriteOffersAction());
     } else {
       dispatch(redirectToRoute(AppRoute.Login));
     }
