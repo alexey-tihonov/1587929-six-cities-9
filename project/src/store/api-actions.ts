@@ -1,7 +1,7 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {api, store} from './index';
 import {redirectToRoute} from './action';
-import {loadData, loadNearbyOffers, loadReviews} from './app-data/app-data';
+import {loadData, loadFavoriteOffers, loadNearbyOffers, loadReviews} from './app-data/app-data';
 import {requireAuthorization} from './user-process/user-process';
 import {errorHandle} from '../services/error-handle';
 import {APIRoute, AppRoute, AuthorizationStatus} from '../const';
@@ -9,6 +9,7 @@ import {Offer} from '../types/offer';
 import {Review} from '../types/review';
 import {AuthData} from '../types/auth-data';
 import {UserData} from '../types/user-data';
+import {Favorite} from '../types/favorite';
 import {saveToken, dropToken} from '../services/token';
 
 export const fetchDataAction = createAsyncThunk(
@@ -17,6 +18,29 @@ export const fetchDataAction = createAsyncThunk(
     try {
       const {data} = await api.get<Offer[]>(APIRoute.Offers);
       store.dispatch(loadData(data));
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
+export const fetchFavoriteOffersAction = createAsyncThunk(
+  'data/fetchFavoriteOffers',
+  async () => {
+    try {
+      const {data} = await api.get<Offer[]>(APIRoute.Favorite);
+      store.dispatch(loadFavoriteOffers(data));
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
+export const setIsFavoriteAction = createAsyncThunk(
+  'data/setIsFavorite',
+  async ({offerId, isFavorite}: Favorite) => {
+    try {
+      await api.post<Offer>(`${APIRoute.Favorite}/${offerId}/${isFavorite ? 1 : 0}`);
     } catch (error) {
       errorHandle(error);
     }

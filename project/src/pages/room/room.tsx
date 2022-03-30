@@ -1,7 +1,7 @@
 import {useParams} from 'react-router-dom';
-import {useEffect} from 'react';
-import {MAX_RATING, OfferType} from '../../const';
-import {useAppSelector} from '../../hooks';
+import {MouseEvent, useEffect, useState} from 'react';
+import {AppRoute, AuthorizationStatus, MAX_RATING, OfferType} from '../../const';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getPercent} from '../../utils';
 import {Offer} from '../../types/offer';
 import OfferCardList from '../../components/offer-card-list/offer-card-list';
@@ -10,8 +10,10 @@ import ReviewsList from '../../components/reviews-list/reviews-list';
 import ReviewsForm from '../../components/reviews-form/reviews-form';
 import Map from '../../components/map/map';
 import {store} from '../../store';
-import {fetchNearbyOffersAction, fetchReviewsAction} from '../../store/api-actions';
+import {fetchNearbyOffersAction, fetchReviewsAction, setIsFavoriteAction} from '../../store/api-actions';
 import {getNearbyOffers, getReviews} from '../../store/app-data/selectors';
+import {redirectToRoute} from '../../store/action';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
 type RoomProps = {
   offers: Offer[],
@@ -22,6 +24,10 @@ function Room(props: RoomProps): JSX.Element {
   const {id} = useParams<{ id: string; }>();
   const propertyId = Number(id);
   const property = offers.find((offer: Offer) => offer.id === propertyId);
+
+  const [isFavorite, setIsFavorite] = useState(property !== undefined ? property.isFavorite : false);
+  const dispatch = useAppDispatch();
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   useEffect(() => {
     store.dispatch(fetchNearbyOffersAction(propertyId));
@@ -36,6 +42,21 @@ function Room(props: RoomProps): JSX.Element {
   }
 
   const {bedrooms, images, isPremium, title, rating, type, maxAdults, price, host, description} = property;
+
+  const handleAddToFavorites = (evt: MouseEvent): void => {
+    evt.preventDefault();
+
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(setIsFavoriteAction({
+        offerId: property.id,
+        isFavorite: !isFavorite,
+      }));
+
+      setIsFavorite(!isFavorite);
+    } else {
+      dispatch(redirectToRoute(AppRoute.Login));
+    }
+  };
 
   return (
     <>
@@ -58,7 +79,11 @@ function Room(props: RoomProps): JSX.Element {
               <h1 className="property__name">
                 {title}
               </h1>
-              <button className="property__bookmark-button button" type="button">
+              <button
+                className={`property__bookmark-button${isFavorite ? ' property__bookmark-button--active' : ''} button`}
+                type="button"
+                onClick={handleAddToFavorites}
+              >
                 <svg className="property__bookmark-icon" width="31" height="33">
                   <use xlinkHref="#icon-bookmark"></use>
                 </svg>

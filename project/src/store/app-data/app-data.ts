@@ -7,6 +7,7 @@ import {Review} from '../../types/review';
 const initialState: AppData = {
   data: [] as Offer[],
   isDataLoaded: false,
+  favoriteOffers: [] as Offer[],
   nearbyOffers: [] as Offer[],
   reviews: [] as Review[],
 };
@@ -19,6 +20,9 @@ export const appData = createSlice({
       state.data = action.payload;
       state.isDataLoaded = true;
     },
+    loadFavoriteOffers: (state, action) => {
+      state.favoriteOffers = action.payload;
+    },
     loadNearbyOffers: (state, action) => {
       state.nearbyOffers = action.payload;
     },
@@ -28,4 +32,4 @@ export const appData = createSlice({
   },
 });
 
-export const {loadData, loadNearbyOffers, loadReviews} = appData.actions;
+export const {loadData, loadFavoriteOffers, loadNearbyOffers, loadReviews} = appData.actions;

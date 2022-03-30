@@ -6,6 +6,7 @@ import {Review} from './review';
 export type AppData = {
   data: Offer[],
   isDataLoaded: boolean,
+  favoriteOffers: Offer[],
   nearbyOffers: Offer[],
   reviews: Review[],
 };

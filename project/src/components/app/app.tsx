@@ -34,7 +34,7 @@ function App(): JSX.Element {
           <Route path={AppRoute.Favorites}
             element={
               <PrivateRoute authorizationStatus={authorizationStatus}>
-                <Favorites offers={data} offerType={OfferType.Favorite}/>
+                <Favorites/>
               </PrivateRoute>
             }
           />
