@@ -1,13 +1,15 @@
-import {Link, Outlet, useLocation} from 'react-router-dom';
 import Icons from '../icons/icons';
+import {Link, Outlet, useLocation} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {isAuth} from '../../utils';
 import {AppRoute} from '../../const';
 import {logoutAction} from '../../store/api-actions';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
 function Layout(): JSX.Element {
   const location = useLocation();
-  const {authorizationStatus} = useAppSelector((state) => state);
+
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
 
   return (

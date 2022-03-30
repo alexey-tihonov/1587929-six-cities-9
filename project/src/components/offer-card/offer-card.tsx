@@ -1,3 +1,4 @@
+import {memo} from 'react';
 import {Link} from 'react-router-dom';
 import {Offer} from '../../types/offer';
 import {MAX_RATING, OfferType} from '../../const';
@@ -47,7 +48,7 @@ function OfferCard(props: OfferCardProps): JSX.Element {
       </div>
       <div className={`${placeCardImageWrapperClassName} place-card__image-wrapper`}>
         <Link className="header__logo-link" to={`/offer/${offer.id}`}>
-          <img className="place-card__image" src={offer.previewImage} width={placeCardImageWidth} height={placeCardImageHeight} alt="Place image" />
+          <img className="place-card__image" src={offer.previewImage} width={placeCardImageWidth} height={placeCardImageHeight} alt="Place image"/>
         </Link>
       </div>
       <div className={`${placeCardInfoClassName} place-card__info`}>
@@ -80,4 +81,4 @@ function OfferCard(props: OfferCardProps): JSX.Element {
   );
 }
 
-export default OfferCard;
+export default memo(OfferCard, (prevProps, nextProps) => prevProps.offer.id === nextProps.offer.id);
