@@ -2,13 +2,14 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {api, store} from './index';
 import {redirectToRoute} from './action';
 import {loadData, loadFavoriteOffers, loadNearbyOffers, loadReviews} from './app-data/app-data';
-import {requireAuthorization} from './user-process/user-process';
+import {addUserInfo, requireAuthorization} from './user-process/user-process';
 import {errorHandle} from '../services/error-handle';
 import {APIRoute, AppRoute, AuthorizationStatus} from '../const';
 import {Offer} from '../types/offer';
 import {Review} from '../types/review';
 import {AuthData} from '../types/auth-data';
 import {UserData} from '../types/user-data';
+import {UserInfo} from '../types/user-info';
 import {Favorite} from '../types/favorite';
 import {saveToken, dropToken} from '../services/token';
 
@@ -87,9 +88,17 @@ export const checkAuthAction = createAsyncThunk(
   'user/checkAuth',
   async () => {
     try {
-      await api.get(APIRoute.Login);
+      const {data} = await api.get<UserInfo>(APIRoute.Login);
+      store.dispatch(addUserInfo({
+        avatarUrl: data.avatarUrl,
+        email: data.email,
+        id: data.id,
+        isPro: data.isPro,
+        name: data.name,
+      }));
       store.dispatch(requireAuthorization(AuthorizationStatus.Auth));
     } catch (error) {
+      store.dispatch(addUserInfo(undefined));
       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
     }
   },
@@ -99,12 +108,21 @@ export const loginAction = createAsyncThunk(
   'user/login',
   async ({login: email, password}: AuthData) => {
     try {
-      const {data: {token}} = await api.post<UserData>(APIRoute.Login, {email, password});
+      const {data} = await api.post<UserData>(APIRoute.Login, {email, password});
+      const {token} = data;
       saveToken(token);
+      store.dispatch(addUserInfo({
+        avatarUrl: data.avatarUrl,
+        email: data.email,
+        id: data.id,
+        isPro: data.isPro,
+        name: data.name,
+      }));
       store.dispatch(requireAuthorization(AuthorizationStatus.Auth));
       store.dispatch(redirectToRoute(AppRoute.Root));
     } catch (error) {
       errorHandle(error);
+      store.dispatch(addUserInfo(undefined));
       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
     }
   },
@@ -116,6 +134,7 @@ export const logoutAction = createAsyncThunk(
     try {
       await api.delete(APIRoute.Logout);
       dropToken();
+      store.dispatch(addUserInfo(undefined));
       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
       store.dispatch(redirectToRoute(AppRoute.Login));
     } catch (error) {

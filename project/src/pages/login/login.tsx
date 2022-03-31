@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useAppSelector} from '../../hooks';
 import {AuthorizationStatus} from '../../const';
@@ -10,9 +10,11 @@ function Login(): JSX.Element {
 
   const navigate = useNavigate();
 
-  if (authorizationStatus === AuthorizationStatus.Auth) {
-    navigate('/');
-  }
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      navigate('/');
+    }
+  }, [authorizationStatus]);
 
   return (
     <div className="page__login-container container">

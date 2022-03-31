@@ -4,13 +4,14 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {isAuth} from '../../utils';
 import {AppRoute} from '../../const';
 import {logoutAction} from '../../store/api-actions';
-import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import {getAuthorizationStatus, getUserInfo} from '../../store/user-process/selectors';
 
 function Layout(): JSX.Element {
   const location = useLocation();
 
-  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const user = useAppSelector(getUserInfo);
 
   return (
     <>
@@ -32,7 +33,7 @@ function Layout(): JSX.Element {
                         <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
                           <div className="header__avatar-wrapper user__avatar-wrapper">
                           </div>
-                          <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
+                          <span className="header__user-name user__name">{user !== undefined ? user.email : ''}</span>
                         </Link> :
                         <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Login}>
                           <div className="header__avatar-wrapper user__avatar-wrapper">

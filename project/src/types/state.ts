@@ -2,6 +2,7 @@ import {store} from '../store';
 import {AuthorizationStatus} from '../const';
 import {Offer} from './offer';
 import {Review} from './review';
+import {UserInfo} from './user-info';
 
 export type AppData = {
   data: Offer[],
@@ -18,6 +19,7 @@ export type AppProcess = {
 
 export type UserProcess = {
   authorizationStatus: AuthorizationStatus
+  userInfo: UserInfo | undefined
 };
 
 export type State = ReturnType<typeof store.getState>;
