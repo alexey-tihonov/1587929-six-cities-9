@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {cities, SortType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {setOffers} from '../../store/app-process/app-process';
@@ -8,6 +8,7 @@ import {filterOffers, sortOffers} from '../../utils';
 import CityList from '../../components/city-list/city-list';
 import Places from '../../components/places/places';
 import NoPlaces from '../../components/no-places/no-places';
+import Preloader from '../../components/preloader/preloader';
 
 type PageMainProps = {
   offerType: string;
@@ -33,6 +34,10 @@ function Main({offerType}: PageMainProps): JSX.Element {
       dispatch(setOffers(sortOffers(sort, unsortedOffers)));
     }
   }, [sort]);
+
+  if (offers === []) {
+    return <Preloader/>;
+  }
 
   return (
     <>

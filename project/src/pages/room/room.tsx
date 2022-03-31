@@ -14,6 +14,7 @@ import {fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction, setIsFavo
 import {getNearbyOffers, getReviews} from '../../store/app-data/selectors';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import {getOffer} from '../../store/app-process/selectors';
+import Preloader from '../../components/preloader/preloader';
 
 type RoomProps = {
   offers: Offer[],
@@ -39,6 +40,10 @@ function Room(props: RoomProps): JSX.Element {
 
   const nearbyOffers = useAppSelector(getNearbyOffers);
   const reviews = useAppSelector(getReviews);
+
+  if (property === null) {
+    return <Preloader/>;
+  }
 
   if (!property) {
     return <NotFound/>;
