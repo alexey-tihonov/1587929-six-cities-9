@@ -15,6 +15,7 @@ export type AppData = {
 export type AppProcess = {
   activeCity: string,
   currentOffers: Offer[],
+  reviewSendStatus: string,
 };
 
 export type UserProcess = {

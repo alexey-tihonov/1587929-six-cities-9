@@ -167,7 +167,7 @@ function Room(props: RoomProps): JSX.Element {
                 Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
               </h2>
               <ReviewsList reviews={reviews}/>
-              <ReviewsForm offerId={propertyId}/>
+              {authorizationStatus === AuthorizationStatus.Auth && <ReviewsForm offerId={propertyId}/>}
             </section>
           </div>
         </div>

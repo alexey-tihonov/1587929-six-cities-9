@@ -64,3 +64,10 @@ export enum NameSpace {
   data = 'DATA',
   user = 'USER',
 }
+
+export enum ReviewSendStatus {
+  Error = 'ERROR',
+  InProcess = 'IN_PROCESS',
+  Success = 'SUCCESS',
+  Unknown = 'UNKNOWN',
+}

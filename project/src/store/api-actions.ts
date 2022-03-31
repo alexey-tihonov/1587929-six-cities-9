@@ -2,9 +2,10 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {api, store} from './index';
 import {redirectToRoute} from './action';
 import {loadData, loadFavoriteOffers, loadNearbyOffers, loadReviews} from './app-data/app-data';
+import {setReviewSendStatus} from './app-process/app-process';
 import {addUserInfo, requireAuthorization} from './user-process/user-process';
 import {errorHandle} from '../services/error-handle';
-import {APIRoute, AppRoute, AuthorizationStatus} from '../const';
+import {APIRoute, AppRoute, AuthorizationStatus, ReviewSendStatus} from '../const';
 import {Offer} from '../types/offer';
 import {Review} from '../types/review';
 import {AuthData} from '../types/auth-data';
@@ -72,13 +73,15 @@ export const fetchReviewsAction = createAsyncThunk(
   },
 );
 
-export const postReviewsAction = createAsyncThunk(
+export const sendReviewAction = createAsyncThunk(
   'data/postReviews',
   async (params: {data: {comment: string, rating: number}, offerId: number }) => {
     try {
       const {data, offerId} = params;
       await api.post<Review[]>(`${APIRoute.Comments}/${offerId.toString()}`, data);
+      store.dispatch(setReviewSendStatus(ReviewSendStatus.Success));
     } catch (error) {
+      store.dispatch(setReviewSendStatus(ReviewSendStatus.Error));
       errorHandle(error);
     }
   },
