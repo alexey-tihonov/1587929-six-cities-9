@@ -1,8 +1,8 @@
 import {useParams} from 'react-router-dom';
 import React, {MouseEvent, useEffect, useState} from 'react';
-import {AppRoute, AuthorizationStatus, MAX_RATING, OfferType} from '../../const';
+import {AppRoute, MAX_RATING, OfferType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {getPercent} from '../../utils';
+import {getPercent, isAuth} from '../../utils';
 import {Offer} from '../../types/offer';
 import OfferCardList from '../../components/offer-card-list/offer-card-list';
 import NotFound from '../../pages/not-found/not-found';
@@ -49,7 +49,7 @@ function Room(props: RoomProps): JSX.Element {
   const handleAddToFavorites = (evt: MouseEvent): void => {
     evt.preventDefault();
 
-    if (authorizationStatus === AuthorizationStatus.Auth) {
+    if (isAuth(authorizationStatus)) {
       dispatch(setIsFavoriteAction({
         offerId: property.id,
         isFavorite: !isFavorite,
@@ -170,7 +170,7 @@ function Room(props: RoomProps): JSX.Element {
                 Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
               </h2>
               <ReviewsList reviews={reviews}/>
-              {authorizationStatus === AuthorizationStatus.Auth && <ReviewsForm offerId={propertyId}/>}
+              {isAuth(authorizationStatus) && <ReviewsForm offerId={propertyId}/>}
             </section>
           </div>
         </div>

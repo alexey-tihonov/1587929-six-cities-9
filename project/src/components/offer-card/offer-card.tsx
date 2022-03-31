@@ -1,8 +1,8 @@
 import {memo, MouseEvent, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {Offer} from '../../types/offer';
-import {AppRoute, AuthorizationStatus, MAX_RATING, OfferType} from '../../const';
-import {getPercent} from '../../utils';
+import {AppRoute, MAX_RATING, OfferType} from '../../const';
+import {getPercent, isAuth} from '../../utils';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchFavoriteOffersAction, setIsFavoriteAction} from '../../store/api-actions';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
@@ -28,7 +28,7 @@ function OfferCard(props: OfferCardProps): JSX.Element {
   const handleAddToFavorites = async (evt: MouseEvent) => {
     evt.preventDefault();
 
-    if (authorizationStatus === AuthorizationStatus.Auth) {
+    if (isAuth(authorizationStatus)) {
       await dispatch(setIsFavoriteAction({
         offerId: offer.id,
         isFavorite: !isFavorite,

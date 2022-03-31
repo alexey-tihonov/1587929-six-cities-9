@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useAppSelector} from '../../hooks';
-import {AuthorizationStatus} from '../../const';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import LoginForm from '../../components/login-form/login-form';
+import {isAuth} from '../../utils';
 
 function Login(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
@@ -11,7 +11,7 @@ function Login(): JSX.Element {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (authorizationStatus === AuthorizationStatus.Auth) {
+    if (isAuth(authorizationStatus)) {
       navigate('/');
     }
   }, [authorizationStatus]);
