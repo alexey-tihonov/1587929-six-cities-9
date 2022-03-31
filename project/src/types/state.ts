@@ -14,13 +14,14 @@ export type AppData = {
 
 export type AppProcess = {
   activeCity: string,
-  currentOffers: Offer[],
+  offer: Offer | null,
+  offers: Offer[],
   reviewSendStatus: string,
 };
 
 export type UserProcess = {
   authorizationStatus: AuthorizationStatus
-  userInfo: UserInfo | undefined
+  userInfo: UserInfo | null
 };
 
 export type State = ReturnType<typeof store.getState>;

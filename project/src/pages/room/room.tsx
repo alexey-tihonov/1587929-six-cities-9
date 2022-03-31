@@ -1,5 +1,5 @@
 import {useParams} from 'react-router-dom';
-import {MouseEvent, useEffect, useState} from 'react';
+import React, {MouseEvent, useEffect, useState} from 'react';
 import {AppRoute, AuthorizationStatus, MAX_RATING, OfferType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getPercent} from '../../utils';
@@ -9,11 +9,11 @@ import NotFound from '../../pages/not-found/not-found';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import ReviewsForm from '../../components/reviews-form/reviews-form';
 import Map from '../../components/map/map';
-import {store} from '../../store';
-import {fetchNearbyOffersAction, fetchReviewsAction, setIsFavoriteAction} from '../../store/api-actions';
-import {getNearbyOffers, getReviews} from '../../store/app-data/selectors';
 import {redirectToRoute} from '../../store/action';
+import {fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction, setIsFavoriteAction} from '../../store/api-actions';
+import {getNearbyOffers, getReviews} from '../../store/app-data/selectors';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import {getOffer} from '../../store/app-process/selectors';
 
 type RoomProps = {
   offers: Offer[],
@@ -23,15 +23,18 @@ function Room(props: RoomProps): JSX.Element {
   const {offers} = props;
   const {id} = useParams<{ id: string; }>();
   const propertyId = Number(id);
-  const property = offers.find((offer: Offer) => offer.id === propertyId);
 
-  const [isFavorite, setIsFavorite] = useState(property !== undefined ? property.isFavorite : false);
   const dispatch = useAppDispatch();
+
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const property = useAppSelector(getOffer);
+
+  const [isFavorite, setIsFavorite] = useState(property !== null ? property.isFavorite : false);
 
   useEffect(() => {
-    store.dispatch(fetchNearbyOffersAction(propertyId));
-    store.dispatch(fetchReviewsAction(propertyId));
+    dispatch(fetchOfferAction(propertyId));
+    dispatch(fetchNearbyOffersAction(propertyId));
+    dispatch(fetchReviewsAction(propertyId));
   }, [propertyId]);
 
   const nearbyOffers = useAppSelector(getNearbyOffers);

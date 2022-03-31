@@ -2,7 +2,7 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {api, store} from './index';
 import {redirectToRoute} from './action';
 import {loadData, loadFavoriteOffers, loadNearbyOffers, loadReviews} from './app-data/app-data';
-import {setReviewSendStatus} from './app-process/app-process';
+import {setOffer, setReviewSendStatus} from './app-process/app-process';
 import {addUserInfo, requireAuthorization} from './user-process/user-process';
 import {errorHandle} from '../services/error-handle';
 import {APIRoute, AppRoute, AuthorizationStatus, ReviewSendStatus} from '../const';
@@ -55,6 +55,18 @@ export const fetchNearbyOffersAction = createAsyncThunk(
     try {
       const {data} = await api.get<Offer[]>(`${APIRoute.Offers}/${offerId.toString()}/nearby`);
       store.dispatch(loadNearbyOffers(data));
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
+export const fetchOfferAction = createAsyncThunk(
+  'data/fetchOffer',
+  async (offerId: number) => {
+    try {
+      const {data} = await api.get<Offer>(`${APIRoute.Offers}/${offerId.toString()}`);
+      store.dispatch(setOffer(data));
     } catch (error) {
       errorHandle(error);
     }

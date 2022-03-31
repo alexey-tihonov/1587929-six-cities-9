@@ -5,7 +5,7 @@ import {fetchFavoriteOffersAction} from '../../store/api-actions';
 import {getFavoriteOffers} from '../../store/app-data/selectors';
 import {changeCity} from '../../store/app-process/app-process';
 import {AppRoute, cities, OfferType} from '../../const';
-import {getOffers} from '../../utils';
+import {filterOffers} from '../../utils';
 import OfferCardList from '../../components/offer-card-list/offer-card-list';
 
 function Favorites(): JSX.Element {
@@ -26,7 +26,7 @@ function Favorites(): JSX.Element {
             <ul className="favorites__list">
               {
                 cities.map((city) => {
-                  const offers = getOffers(city, favoriteOffers);
+                  const offers = filterOffers(city, favoriteOffers);
                   if (offers.length > 0) {
                     return (
                       <li className="favorites__locations-items" key={city}>

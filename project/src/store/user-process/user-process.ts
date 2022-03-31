@@ -4,7 +4,7 @@ import {UserProcess} from '../../types/state';
 
 const initialState: UserProcess = {
   authorizationStatus: AuthorizationStatus.Unknown,
-  userInfo: undefined,
+  userInfo: null,
 };
 
 export const userProcess = createSlice({

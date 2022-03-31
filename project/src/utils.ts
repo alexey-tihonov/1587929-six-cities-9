@@ -10,7 +10,7 @@ export const getDate = (dateString: string) => {
 
 export const getPercent = (partialValue: number, totalValue: number) => (100 * partialValue) / totalValue;
 
-export const getOffers = (city: string, offers: Offer[]) => offers.filter((offer) => offer.city.name === city);
+export const filterOffers = (city: string, offers: Offer[]) => offers.filter((offer) => offer.city.name === city);
 
 export const sortOffers = (sort: string, offers: Offer[]) => {
   switch (sort) {

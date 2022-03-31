@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react';
 import {cities, SortType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {fillOffers} from '../../store/app-process/app-process';
+import {setOffers} from '../../store/app-process/app-process';
 import {getData} from '../../store/app-data/selectors';
-import {getActiveCity, getCurrentOffers} from '../../store/app-process/selectors';
-import {getOffers, sortOffers} from '../../utils';
+import {getActiveCity, getOffers} from '../../store/app-process/selectors';
+import {filterOffers, sortOffers} from '../../utils';
 import CityList from '../../components/city-list/city-list';
 import Places from '../../components/places/places';
 import NoPlaces from '../../components/no-places/no-places';
@@ -16,22 +16,21 @@ type PageMainProps = {
 function Main({offerType}: PageMainProps): JSX.Element {
   const activeCity = useAppSelector(getActiveCity);
   const data = useAppSelector(getData);
-  const offers = useAppSelector(getCurrentOffers);
+  const offers = useAppSelector(getOffers);
   const dispatch = useAppDispatch();
 
   const [sort, setSort] = useState(SortType.Default.toString());
   const isExistOffers = (offers.length > 0);
-  let currentOffers = getOffers(activeCity, data);
+  const unsortedOffers = filterOffers(activeCity, data);
 
   useEffect(() => {
-    currentOffers = getOffers(activeCity, data);
     setSort(SortType.Default);
-    dispatch(fillOffers(currentOffers));
+    dispatch(setOffers(filterOffers(activeCity, data)));
   }, [activeCity]);
 
   useEffect(() => {
     if (isExistOffers) {
-      dispatch(fillOffers(sortOffers(sort, currentOffers)));
+      dispatch(setOffers(sortOffers(sort, unsortedOffers)));
     }
   }, [sort]);
 
