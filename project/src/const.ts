@@ -1,4 +1,5 @@
 export const MAX_RATING = 5;
+export const MAX_REVIEWS = 10;
 
 export const cities = [
   'Paris',

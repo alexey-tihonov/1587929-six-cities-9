@@ -18,7 +18,7 @@ function Favorites(): JSX.Element {
     dispatch(fetchFavoriteOffersAction());
   }, []);
 
-  if (favoriteOffers === []) {
+  if (favoriteOffers.length === 0) {
     return <Preloader/>;
   }
 
@@ -47,7 +47,7 @@ function Favorites(): JSX.Element {
                           </div>
                         </div>
                         <div className="favorites__places">
-                          <OfferCardList offers={offers} offerType={OfferType.Favorite} setActiveOffer={() => false}/>
+                          <OfferCardList offers={offers} offerType={OfferType.Favorite} onActiveOfferChange={() => false}/>
                         </div>
                       </li>
                     );

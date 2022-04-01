@@ -3,7 +3,7 @@ import {Route, Routes} from 'react-router-dom';
 import {AppRoute, OfferType} from '../../const';
 import {useAppSelector} from '../../hooks';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
-import {getData, getLoadedDataStatus} from '../../store/app-data/selectors';
+import {getLoadedDataStatus} from '../../store/app-data/selectors';
 import PrivateRoute from '../private-route/private-route';
 import Layout from '../layout/layout';
 import Main from '../../pages/main/main';
@@ -18,7 +18,6 @@ import browserHistory from '../../browser-history';
 
 function App(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  const data = useAppSelector(getData);
   const isDataLoaded = useAppSelector(getLoadedDataStatus);
 
   if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
@@ -38,7 +37,7 @@ function App(): JSX.Element {
               </PrivateRoute>
             }
           />
-          <Route path={AppRoute.Room} element={<Room offers={data}/>}/>
+          <Route path={AppRoute.Room} element={<Room/>}/>
           <Route path="*" element={<NotFound/>}/>
         </Route>
       </Routes>

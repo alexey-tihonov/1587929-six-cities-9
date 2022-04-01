@@ -2,33 +2,26 @@ import {useParams} from 'react-router-dom';
 import React, {MouseEvent, useEffect, useState} from 'react';
 import {AppRoute, MAX_RATING, OfferType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {getPercent, isAuth} from '../../utils';
-import {Offer} from '../../types/offer';
-import OfferCardList from '../../components/offer-card-list/offer-card-list';
-import NotFound from '../../pages/not-found/not-found';
-import ReviewsList from '../../components/reviews-list/reviews-list';
-import ReviewsForm from '../../components/reviews-form/reviews-form';
-import Map from '../../components/map/map';
 import {redirectToRoute} from '../../store/action';
 import {fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction, setIsFavoriteAction} from '../../store/api-actions';
-import {getNearbyOffers, getReviews} from '../../store/app-data/selectors';
+import {getNearbyOffers} from '../../store/app-data/selectors';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
-import {getOffer} from '../../store/app-process/selectors';
+import {getOffer} from '../../store/app-data/selectors';
+import {getPercent, isAuth} from '../../utils';
+import OfferCardList from '../../components/offer-card-list/offer-card-list';
+import NotFound from '../../pages/not-found/not-found';
+import Reviews from '../../components/reviews/reviews';
+import Map from '../../components/map/map';
 import Preloader from '../../components/preloader/preloader';
 
-type RoomProps = {
-  offers: Offer[],
-}
-
-function Room(props: RoomProps): JSX.Element {
-  const {offers} = props;
+function Room(): JSX.Element {
   const {id} = useParams<{ id: string; }>();
   const propertyId = Number(id);
 
   const dispatch = useAppDispatch();
-
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const property = useAppSelector(getOffer);
+  const nearbyOffers = useAppSelector(getNearbyOffers);
 
   const [isFavorite, setIsFavorite] = useState(property !== null ? property.isFavorite : false);
 
@@ -37,9 +30,6 @@ function Room(props: RoomProps): JSX.Element {
     dispatch(fetchNearbyOffersAction(propertyId));
     dispatch(fetchReviewsAction(propertyId));
   }, [propertyId]);
-
-  const nearbyOffers = useAppSelector(getNearbyOffers);
-  const reviews = useAppSelector(getReviews);
 
   if (property === null) {
     return <Preloader/>;
@@ -170,24 +160,18 @@ function Room(props: RoomProps): JSX.Element {
                 </p>
               </div>
             </div>
-            <section className="property__reviews reviews">
-              <h2 className="reviews__title">
-                Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
-              </h2>
-              <ReviewsList reviews={reviews}/>
-              {isAuth(authorizationStatus) && <ReviewsForm offerId={propertyId}/>}
-            </section>
+            <Reviews offerId={propertyId}/>
           </div>
         </div>
         <section className="property__map map">
-          <Map activeOffer={propertyId} className="property__map" offers={offers}/>
+          <Map activeOffer={propertyId} className="property__map" offers={[property, ...nearbyOffers]}/>
         </section>
       </section>
       <div className="container">
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            <OfferCardList offers={nearbyOffers} offerType={OfferType.NearPlace} setActiveOffer={() => false}/>
+            <OfferCardList offers={nearbyOffers} offerType={OfferType.NearPlace} onActiveOfferChange={() => false}/>
           </div>
         </section>
       </div>

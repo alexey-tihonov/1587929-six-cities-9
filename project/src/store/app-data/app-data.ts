@@ -5,10 +5,11 @@ import {Offer} from '../../types/offer';
 import {Review} from '../../types/review';
 
 const initialState: AppData = {
-  data: [] as Offer[],
   isDataLoaded: false,
   favoriteOffers: [] as Offer[],
   nearbyOffers: [] as Offer[],
+  offer: null,
+  offers: [] as Offer[],
   reviews: [] as Review[],
 };
 
@@ -16,8 +17,11 @@ export const appData = createSlice({
   name: NameSpace.data,
   initialState,
   reducers: {
-    loadData: (state, action) => {
-      state.data = action.payload;
+    loadOffer: (state, action) => {
+      state.offer = action.payload;
+    },
+    loadOffers: (state, action) => {
+      state.offers = action.payload;
       state.isDataLoaded = true;
     },
     loadFavoriteOffers: (state, action) => {
@@ -32,4 +36,4 @@ export const appData = createSlice({
   },
 });
 
-export const {loadData, loadFavoriteOffers, loadNearbyOffers, loadReviews} = appData.actions;
+export const {loadOffer, loadOffers, loadFavoriteOffers, loadNearbyOffers, loadReviews} = appData.actions;

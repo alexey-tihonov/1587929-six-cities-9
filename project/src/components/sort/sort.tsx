@@ -2,10 +2,10 @@ import {SortType} from '../../const';
 
 type SortProps = {
   sort: string,
-  setSort: (sort: string) => void,
+  onSortChange: (sort: string) => void,
 }
 
-function Sort({sort, setSort}: SortProps) {
+function Sort({sort, onSortChange}: SortProps) {
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
@@ -21,7 +21,7 @@ function Sort({sort, setSort}: SortProps) {
             className={`places__option${sort === sortName ? ' places__option--active' : ''}`}
             key={sortName}
             tabIndex={0}
-            onClick={() => sort !== sortName && setSort(sortName)}
+            onClick={() => sort !== sortName && onSortChange(sortName)}
           >
             {sortName}
           </li>

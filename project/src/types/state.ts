@@ -5,17 +5,17 @@ import {Review} from './review';
 import {UserInfo} from './user-info';
 
 export type AppData = {
-  data: Offer[],
   isDataLoaded: boolean,
   favoriteOffers: Offer[],
   nearbyOffers: Offer[],
+  offer: null,
+  offers: Offer[],
   reviews: Review[],
 };
 
 export type AppProcess = {
   activeCity: string,
-  offer: Offer | null,
-  offers: Offer[],
+  activeCityOffers: Offer[],
   reviewSendStatus: string,
 };
 

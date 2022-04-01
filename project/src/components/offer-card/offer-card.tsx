@@ -11,18 +11,18 @@ import {redirectToRoute} from '../../store/action';
 type OfferCardProps = {
   offer: Offer;
   offerType: string,
-  setActiveOffer: (id: number) => void;
+  onActiveOfferChange: (id: number) => void;
 }
 
 function OfferCard(props: OfferCardProps): JSX.Element {
-  const {offer, offerType, setActiveOffer} = props;
+  const {offer, offerType, onActiveOfferChange} = props;
 
   const [isFavorite, setIsFavorite] = useState(offer.isFavorite);
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   const handleMouseEnter = () => {
-    setActiveOffer(offer.id);
+    onActiveOfferChange(offer.id);
   };
 
   const handleAddToFavorites = async (evt: MouseEvent) => {

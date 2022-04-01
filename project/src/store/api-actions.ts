@@ -1,8 +1,8 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {api, store} from './index';
 import {redirectToRoute} from './action';
-import {loadData, loadFavoriteOffers, loadNearbyOffers, loadReviews} from './app-data/app-data';
-import {setOffer, setReviewSendStatus} from './app-process/app-process';
+import {loadOffer, loadOffers, loadFavoriteOffers, loadNearbyOffers, loadReviews} from './app-data/app-data';
+import {setReviewSendStatus} from './app-process/app-process';
 import {addUserInfo, requireAuthorization} from './user-process/user-process';
 import {errorHandle} from '../services/error-handle';
 import {APIRoute, AppRoute, AuthorizationStatus, ReviewSendStatus} from '../const';
@@ -14,12 +14,23 @@ import {UserInfo} from '../types/user-info';
 import {Favorite} from '../types/favorite';
 import {saveToken, dropToken} from '../services/token';
 
-export const fetchDataAction = createAsyncThunk(
-  'data/fetchData',
+export const fetchOfferAction = createAsyncThunk(
+  'DATA/fetchOffer',
+  async (offerId: number) => {
+    try {
+      const {data} = await api.get<Offer>(`${APIRoute.Offers}/${offerId.toString()}`);
+      store.dispatch(loadOffer(data));
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+export const fetchOffersAction = createAsyncThunk(
+  'DATA/fetchOffers',
   async () => {
     try {
       const {data} = await api.get<Offer[]>(APIRoute.Offers);
-      store.dispatch(loadData(data));
+      store.dispatch(loadOffers(data));
     } catch (error) {
       errorHandle(error);
     }
@@ -27,7 +38,7 @@ export const fetchDataAction = createAsyncThunk(
 );
 
 export const fetchFavoriteOffersAction = createAsyncThunk(
-  'data/fetchFavoriteOffers',
+  'DATA/fetchFavoriteOffers',
   async () => {
     try {
       const {data} = await api.get<Offer[]>(APIRoute.Favorite);
@@ -38,19 +49,8 @@ export const fetchFavoriteOffersAction = createAsyncThunk(
   },
 );
 
-export const setIsFavoriteAction = createAsyncThunk(
-  'data/setIsFavorite',
-  async ({offerId, isFavorite}: Favorite) => {
-    try {
-      await api.post<Offer>(`${APIRoute.Favorite}/${offerId}/${isFavorite ? 1 : 0}`);
-    } catch (error) {
-      errorHandle(error);
-    }
-  },
-);
-
 export const fetchNearbyOffersAction = createAsyncThunk(
-  'data/fetchNearbyOffers',
+  'DATA/fetchNearbyOffers',
   async (offerId: number) => {
     try {
       const {data} = await api.get<Offer[]>(`${APIRoute.Offers}/${offerId.toString()}/nearby`);
@@ -61,20 +61,8 @@ export const fetchNearbyOffersAction = createAsyncThunk(
   },
 );
 
-export const fetchOfferAction = createAsyncThunk(
-  'data/fetchOffer',
-  async (offerId: number) => {
-    try {
-      const {data} = await api.get<Offer>(`${APIRoute.Offers}/${offerId.toString()}`);
-      store.dispatch(setOffer(data));
-    } catch (error) {
-      errorHandle(error);
-    }
-  },
-);
-
 export const fetchReviewsAction = createAsyncThunk(
-  'data/fetchReviews',
+  'DATA/fetchReviews',
   async (offerId: number) => {
     try {
       const {data} = await api.get<Review[]>(`${APIRoute.Comments}/${offerId.toString()}`);
@@ -86,7 +74,7 @@ export const fetchReviewsAction = createAsyncThunk(
 );
 
 export const sendReviewAction = createAsyncThunk(
-  'data/postReviews',
+  'APP/postReviews',
   async (params: {data: {comment: string, rating: number}, offerId: number }) => {
     try {
       const {data, offerId} = params;
@@ -99,8 +87,19 @@ export const sendReviewAction = createAsyncThunk(
   },
 );
 
+export const setIsFavoriteAction = createAsyncThunk(
+  'APP/setIsFavorite',
+  async ({offerId, isFavorite}: Favorite) => {
+    try {
+      await api.post<Offer>(`${APIRoute.Favorite}/${offerId}/${isFavorite ? 1 : 0}`);
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
 export const checkAuthAction = createAsyncThunk(
-  'user/checkAuth',
+  'USER/checkAuth',
   async () => {
     try {
       const {data} = await api.get<UserInfo>(APIRoute.Login);
@@ -120,7 +119,7 @@ export const checkAuthAction = createAsyncThunk(
 );
 
 export const loginAction = createAsyncThunk(
-  'user/login',
+  'USER/login',
   async ({login: email, password}: AuthData) => {
     try {
       const {data} = await api.post<UserData>(APIRoute.Login, {email, password});
@@ -144,7 +143,7 @@ export const loginAction = createAsyncThunk(
 );
 
 export const logoutAction = createAsyncThunk(
-  'user/logout',
+  'USER/logout',
   async () => {
     try {
       await api.delete(APIRoute.Logout);

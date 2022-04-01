@@ -1,5 +1,6 @@
 import {AuthorizationStatus, SortType} from './const';
 import {Offer} from './types/offer';
+import {Review} from './types/review';
 
 export const getDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -24,6 +25,14 @@ export const sortOffers = (sort: string, offers: Offer[]) => {
     default:
       return offers;
   }
+};
+
+export const sortReviews = (reviews: Review[]) => {
+  if (reviews === []) {
+    return reviews;
+  }
+
+  return reviews.sort((prev, next) => Date.parse(next.date) - Date.parse(prev.date));
 };
 
 export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Unknown;

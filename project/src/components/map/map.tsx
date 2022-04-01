@@ -1,5 +1,5 @@
 import {useRef, useEffect} from 'react';
-import {Marker} from 'leaflet';
+import {LayerGroup, Marker} from 'leaflet';
 import useMap from '../../hooks/useMap';
 import leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -26,6 +26,7 @@ function Map({activeOffer, className, offers}: MapProps) {
 
   useEffect(() => {
     if (map) {
+      const markers:Marker[] = [];
       offers.map((offer) => {
         const marker = new Marker({
           lat: offer.location.latitude,
@@ -33,15 +34,20 @@ function Map({activeOffer, className, offers}: MapProps) {
         });
         const icon = getIcon(activeOffer === offer.id);
 
-        marker
-          .setIcon(icon)
-          .addTo(map);
+        marker.setIcon(icon);
+        markers.push(marker);
       });
+      const layerGroup = new LayerGroup(markers);
+      layerGroup.addTo(map);
+
+      return () => {
+        map?.removeLayer(layerGroup);
+      };
     }
   }, [map, activeOffer, offers]);
 
   return (
-    <section className={`${className} map`} ref={mapRef}></section>
+    <section className={`${className} map`} ref={mapRef}/>
   );
 }
 

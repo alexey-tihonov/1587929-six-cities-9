@@ -9,10 +9,10 @@ type Places = {
   offers: Offer[],
   offerType: string,
   sort: string,
-  setSort: (sort: string) => void,
+  onSortChange: (sort: string) => void,
 }
 
-function Places({cityName, offers, offerType, sort, setSort}: Places) {
+function Places({cityName, offers, offerType, sort, onSortChange}: Places) {
   const [activeOffer, setActiveOffer] = useState<number | null>(null);
 
   return (
@@ -20,9 +20,9 @@ function Places({cityName, offers, offerType, sort, setSort}: Places) {
       <section className="cities__places places">
         <h2 className="visually-hidden">Places</h2>
         <b className="places__found">{offers.length} places to stay in {cityName}</b>
-        <Sort sort={sort} setSort={setSort}/>
+        <Sort sort={sort} onSortChange={onSortChange}/>
         <div className="cities__places-list places__list tabs__content">
-          <OfferCardList offers={offers} offerType={offerType} setActiveOffer={setActiveOffer}/>
+          <OfferCardList offers={offers} offerType={offerType} onActiveOfferChange={setActiveOffer}/>
         </div>
       </section>
       <div className="cities__right-section">
