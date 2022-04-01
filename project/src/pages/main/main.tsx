@@ -22,15 +22,15 @@ function Main({offerType}: PageMainProps): JSX.Element {
 
   const [sort, setSort] = useState(SortType.Default.toString());
   const isExistOffers = offers !== null && (offers.length > 0);
-  const unsortedOffers = filterOffers(activeCity, data);
 
   useEffect(() => {
     setSort(SortType.Default);
-    dispatch(setActiveCityOffers(filterOffers(activeCity, data)));
-  }, [activeCity]);
+    dispatch(setActiveCityOffers(data));
+  }, [activeCity, data]);
 
   useEffect(() => {
     if (isExistOffers) {
+      const unsortedOffers = filterOffers(activeCity, data);
       dispatch(setActiveCityOffers(sortOffers(sort, unsortedOffers)));
     }
   }, [sort]);

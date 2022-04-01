@@ -1,6 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace, cities, ReviewSendStatus} from '../../const';
 import {AppProcess} from '../../types/state';
+import {filterOffers} from '../../utils';
 
 const initialState: AppProcess = {
   activeCity: cities[0],
@@ -16,7 +17,7 @@ export const appProcess = createSlice({
       state.activeCity = action.payload;
     },
     setActiveCityOffers: (state, action) => {
-      state.activeCityOffers = action.payload;
+      state.activeCityOffers = filterOffers(state.activeCity, action.payload);
     },
     setReviewSendStatus: (state, action) => {
       state.reviewSendStatus = action.payload;

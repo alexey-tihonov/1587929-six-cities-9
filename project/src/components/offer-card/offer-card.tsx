@@ -4,7 +4,7 @@ import {Offer} from '../../types/offer';
 import {AppRoute, MAX_RATING, OfferType} from '../../const';
 import {getPercent, isAuth} from '../../utils';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {fetchFavoriteOffersAction, setIsFavoriteAction} from '../../store/api-actions';
+import {fetchFavoriteOffersAction, fetchOffersAction, setIsFavoriteAction} from '../../store/api-actions';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import {redirectToRoute} from '../../store/action';
 
@@ -36,6 +36,7 @@ function OfferCard(props: OfferCardProps): JSX.Element {
       }));
 
       await dispatch(fetchFavoriteOffersAction());
+      await dispatch(fetchOffersAction());
     } else {
       dispatch(redirectToRoute(AppRoute.Login));
     }
