@@ -8,7 +8,7 @@ export type AppData = {
   isDataLoaded: boolean,
   favoriteOffers: Offer[],
   nearbyOffers: Offer[],
-  offer: null,
+  offer: Offer | null,
   offers: Offer[],
   reviews: Review[],
 };
