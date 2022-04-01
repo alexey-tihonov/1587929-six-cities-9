@@ -1,4 +1,4 @@
-import {AuthorizationStatus, SortType} from './const';
+import {AuthorizationStatus, SortType, cities} from './const';
 import {Offer} from './types/offer';
 import {Review} from './types/review';
 
@@ -37,3 +37,6 @@ export const sortReviews = (reviews: Review[]) => {
 
 export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Unknown;
 export const isAuth = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Auth;
+
+export const getRandomNumber = (min: number, max: number):number => Math.floor(Math.random() * (max - min + 1)) + min;
+export const getRandomCity = () => cities[getRandomNumber(0, cities.length - 1)];
