@@ -6,7 +6,7 @@ import {Review} from '../../types/review';
 
 const initialState: AppData = {
   isDataLoaded: false,
-  favoriteOffers: [] as Offer[],
+  favoriteOffers: null,
   nearbyOffers: [] as Offer[],
   offer: null,
   offers: [] as Offer[],

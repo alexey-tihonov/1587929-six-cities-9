@@ -1,11 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace, cities, ReviewSendStatus} from '../../const';
 import {AppProcess} from '../../types/state';
-import {Offer} from '../../types/offer';
 
 const initialState: AppProcess = {
   activeCity: cities[0],
-  activeCityOffers: [] as Offer[],
+  activeCityOffers: null,
   reviewSendStatus: ReviewSendStatus.Unknown,
 };
 

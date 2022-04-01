@@ -48,6 +48,7 @@ function Room(): JSX.Element {
       dispatch(setIsFavoriteAction({
         offerId: property.id,
         isFavorite: !isFavorite,
+        onSuccess: setIsFavorite,
       }));
 
       setIsFavorite(!isFavorite);

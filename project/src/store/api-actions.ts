@@ -89,9 +89,12 @@ export const sendReviewAction = createAsyncThunk(
 
 export const setIsFavoriteAction = createAsyncThunk(
   'APP/setIsFavorite',
-  async ({offerId, isFavorite}: Favorite) => {
+  async ({offerId, isFavorite, onSuccess}: Favorite) => {
     try {
-      await api.post<Offer>(`${APIRoute.Favorite}/${offerId}/${isFavorite ? 1 : 0}`);
+      await api.post<Offer>(`${APIRoute.Favorite}/${offerId}/${Number(isFavorite)}`);
+      if (onSuccess !== undefined) {
+        onSuccess(isFavorite);
+      }
     } catch (error) {
       errorHandle(error);
     }
@@ -112,7 +115,7 @@ export const checkAuthAction = createAsyncThunk(
       }));
       store.dispatch(requireAuthorization(AuthorizationStatus.Auth));
     } catch (error) {
-      store.dispatch(addUserInfo(undefined));
+      store.dispatch(addUserInfo(null));
       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
     }
   },
@@ -136,7 +139,7 @@ export const loginAction = createAsyncThunk(
       store.dispatch(redirectToRoute(AppRoute.Root));
     } catch (error) {
       errorHandle(error);
-      store.dispatch(addUserInfo(undefined));
+      store.dispatch(addUserInfo(null));
       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
     }
   },
@@ -148,7 +151,7 @@ export const logoutAction = createAsyncThunk(
     try {
       await api.delete(APIRoute.Logout);
       dropToken();
-      store.dispatch(addUserInfo(undefined));
+      store.dispatch(addUserInfo(null));
       store.dispatch(requireAuthorization(AuthorizationStatus.NoAuth));
       store.dispatch(redirectToRoute(AppRoute.Login));
     } catch (error) {

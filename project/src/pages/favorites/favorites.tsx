@@ -7,6 +7,7 @@ import {changeCity} from '../../store/app-process/app-process';
 import {AppRoute, cities, OfferType} from '../../const';
 import {filterOffers} from '../../utils';
 import OfferCardList from '../../components/offer-card-list/offer-card-list';
+import Preloader from '../../components/preloader/preloader';
 
 function Favorites(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -16,7 +17,11 @@ function Favorites(): JSX.Element {
     dispatch(fetchFavoriteOffersAction());
   }, []);
 
-  const isExistFavoriteOffers = (favoriteOffers.length > 0);
+  const isExistFavoriteOffers = favoriteOffers !== null && (favoriteOffers.length > 0);
+
+  if (favoriteOffers === null) {
+    return <Preloader/>;
+  }
 
   return (
     <div className="page__favorites-container container">

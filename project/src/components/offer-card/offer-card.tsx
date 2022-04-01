@@ -32,9 +32,8 @@ function OfferCard(props: OfferCardProps): JSX.Element {
       await dispatch(setIsFavoriteAction({
         offerId: offer.id,
         isFavorite: !isFavorite,
+        onSuccess: setIsFavorite,
       }));
-
-      setIsFavorite(!isFavorite);
 
       await dispatch(fetchFavoriteOffersAction());
     } else {

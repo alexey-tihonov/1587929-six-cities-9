@@ -6,7 +6,7 @@ import {UserInfo} from './user-info';
 
 export type AppData = {
   isDataLoaded: boolean,
-  favoriteOffers: Offer[],
+  favoriteOffers: Offer[] | null,
   nearbyOffers: Offer[],
   offer: Offer | null,
   offers: Offer[],
@@ -15,7 +15,7 @@ export type AppData = {
 
 export type AppProcess = {
   activeCity: string,
-  activeCityOffers: Offer[],
+  activeCityOffers: Offer[] | null,
   reviewSendStatus: string,
 };
 

@@ -8,6 +8,7 @@ import {filterOffers, sortOffers} from '../../utils';
 import CityList from '../../components/city-list/city-list';
 import Places from '../../components/places/places';
 import NoPlaces from '../../components/no-places/no-places';
+import Preloader from '../../components/preloader/preloader';
 
 type PageMainProps = {
   offerType: string;
@@ -20,7 +21,7 @@ function Main({offerType}: PageMainProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const [sort, setSort] = useState(SortType.Default.toString());
-  const isExistOffers = (offers.length > 0);
+  const isExistOffers = offers !== null && (offers.length > 0);
   const unsortedOffers = filterOffers(activeCity, data);
 
   useEffect(() => {
@@ -33,6 +34,10 @@ function Main({offerType}: PageMainProps): JSX.Element {
       dispatch(setActiveCityOffers(sortOffers(sort, unsortedOffers)));
     }
   }, [sort]);
+
+  if (offers === null) {
+    return <Preloader/>;
+  }
 
   return (
     <>
