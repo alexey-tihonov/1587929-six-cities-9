@@ -15,7 +15,7 @@ function Favorites(): JSX.Element {
 
   useEffect(() => {
     dispatch(fetchFavoriteOffersAction());
-  }, []);
+  }, [dispatch]);
 
   const isExistFavoriteOffers = favoriteOffers !== null && (favoriteOffers.length > 0);
 

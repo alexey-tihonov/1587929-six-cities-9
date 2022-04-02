@@ -4,7 +4,7 @@ import Map from '../map/map';
 import {useState} from 'react';
 import {Offer} from '../../types/offer';
 
-type Places = {
+type PlacesProps = {
   cityName: string
   offers: Offer[],
   offerType: string,
@@ -12,7 +12,7 @@ type Places = {
   onSortChange: (sort: string) => void,
 }
 
-function Places({cityName, offers, offerType, sort, onSortChange}: Places) {
+function Places({cityName, offers, offerType, sort, onSortChange}: PlacesProps) {
   const [activeOffer, setActiveOffer] = useState<number | null>(null);
 
   return (

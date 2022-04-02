@@ -21,7 +21,7 @@ function Reviews({offerId}: ReviewsProps): JSX.Element {
 
   useEffect(() => {
     dispatch(fetchReviewsAction(offerId));
-  }, [reviewSendStatus]);
+  }, [dispatch, offerId, reviewSendStatus]);
 
   return (
     <section className="property__reviews reviews">

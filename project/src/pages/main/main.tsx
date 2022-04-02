@@ -28,12 +28,12 @@ function Main({offerType}: PageMainProps): JSX.Element {
 
   useEffect(() => {
     dispatch(fetchOffersAction());
-  }, [authorizationStatus]);
+  }, [authorizationStatus, dispatch]);
 
   useEffect(() => {
     setSort(SortType.Default);
     dispatch(setActiveCityOffers(data));
-  }, [activeCity, authorizationStatus, data]);
+  }, [activeCity, authorizationStatus, data, dispatch]);
 
   useEffect(() => {
     if (isExistOffers) {

@@ -27,7 +27,7 @@ function Map({activeOffer, className, offers}: MapProps) {
   useEffect(() => {
     if (map) {
       const markers:Marker[] = [];
-      offers.map((offer) => {
+      offers.forEach((offer) => {
         const marker = new Marker({
           lat: offer.location.latitude,
           lng: offer.location.longitude,
@@ -41,7 +41,7 @@ function Map({activeOffer, className, offers}: MapProps) {
       layerGroup.addTo(map);
 
       return () => {
-        map?.removeLayer(layerGroup);
+        map.removeLayer(layerGroup);
       };
     }
   }, [map, activeOffer, offers]);
