@@ -3,8 +3,13 @@ import React, {MouseEvent, useEffect, useState} from 'react';
 import {AppRoute, MAX_RATING, OfferType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {redirectToRoute} from '../../store/action';
-import {fetchNearbyOffersAction, fetchOfferAction, fetchReviewsAction, setIsFavoriteAction} from '../../store/api-actions';
-import {getNearbyOffers} from '../../store/app-data/selectors';
+import {
+  fetchNearbyOffersAction,
+  fetchOfferAction, fetchOffersAction,
+  fetchReviewsAction,
+  setIsFavoriteAction
+} from '../../store/api-actions';
+import {getFavoriteOffers, getNearbyOffers} from '../../store/app-data/selectors';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import {getOffer} from '../../store/app-data/selectors';
 import {getPercent, isAuth} from '../../utils';
@@ -21,15 +26,20 @@ function Room(): JSX.Element {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const property = useAppSelector(getOffer);
+  const favoriteOffers = useAppSelector(getFavoriteOffers);
   const nearbyOffers = useAppSelector(getNearbyOffers);
 
   const [isFavorite, setIsFavorite] = useState(property !== null ? property.isFavorite : false);
 
   useEffect(() => {
+    setIsFavorite(property !== null ? property.isFavorite : false);
+  }, [property]);
+
+  useEffect(() => {
     dispatch(fetchOfferAction(propertyId));
     dispatch(fetchNearbyOffersAction(propertyId));
     dispatch(fetchReviewsAction(propertyId));
-  }, [propertyId]);
+  }, [authorizationStatus, isFavorite, favoriteOffers, propertyId]);
 
   if (property === null) {
     return <Preloader/>;
@@ -41,17 +51,17 @@ function Room(): JSX.Element {
 
   const {bedrooms, images, isPremium, title, rating, type, maxAdults, price, host, description} = property;
 
-  const handleAddToFavorites = (evt: MouseEvent): void => {
+  const handleAddToFavorites = async (evt: MouseEvent) => {
     evt.preventDefault();
 
     if (isAuth(authorizationStatus)) {
-      dispatch(setIsFavoriteAction({
+      await dispatch(setIsFavoriteAction({
         offerId: property.id,
         isFavorite: !isFavorite,
         onSuccess: setIsFavorite,
       }));
 
-      setIsFavorite(!isFavorite);
+      await dispatch(fetchOffersAction());
     } else {
       dispatch(redirectToRoute(AppRoute.Login));
     }

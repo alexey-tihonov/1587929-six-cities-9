@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {cities, SortType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
+import {fetchOffersAction} from '../../store/api-actions';
 import {setActiveCityOffers} from '../../store/app-process/app-process';
 import {getOffers} from '../../store/app-data/selectors';
 import {getActiveCity, getActiveCityOffers} from '../../store/app-process/selectors';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import {filterOffers, sortOffers} from '../../utils';
 import CityList from '../../components/city-list/city-list';
 import Places from '../../components/places/places';
@@ -15,18 +17,23 @@ type PageMainProps = {
 }
 
 function Main({offerType}: PageMainProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const activeCity = useAppSelector(getActiveCity);
   const data = useAppSelector(getOffers);
   const offers = useAppSelector(getActiveCityOffers);
-  const dispatch = useAppDispatch();
 
   const [sort, setSort] = useState(SortType.Default.toString());
   const isExistOffers = offers !== null && (offers.length > 0);
 
   useEffect(() => {
+    dispatch(fetchOffersAction());
+  }, [authorizationStatus]);
+
+  useEffect(() => {
     setSort(SortType.Default);
     dispatch(setActiveCityOffers(data));
-  }, [activeCity, data]);
+  }, [activeCity, authorizationStatus, data]);
 
   useEffect(() => {
     if (isExistOffers) {
