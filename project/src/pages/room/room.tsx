@@ -1,41 +1,71 @@
 import {useParams} from 'react-router-dom';
-import {useEffect} from 'react';
-import {MAX_RATING, OfferType} from '../../const';
-import {useAppSelector} from '../../hooks';
-import {getPercent} from '../../utils';
-import {Offer} from '../../types/offer';
+import React, {MouseEvent, useEffect, useState} from 'react';
+import {AppRoute, MAX_RATING, OfferType} from '../../const';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {redirectToRoute} from '../../store/action';
+import {
+  fetchNearbyOffersAction,
+  fetchOfferAction, fetchOffersAction,
+  fetchReviewsAction,
+  setIsFavoriteAction
+} from '../../store/api-actions';
+import {getFavoriteOffers, getNearbyOffers} from '../../store/app-data/selectors';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import {getOffer} from '../../store/app-data/selectors';
+import {getPercent, isAuth} from '../../utils';
 import OfferCardList from '../../components/offer-card-list/offer-card-list';
 import NotFound from '../../pages/not-found/not-found';
-import ReviewsList from '../../components/reviews-list/reviews-list';
-import ReviewsForm from '../../components/reviews-form/reviews-form';
+import Reviews from '../../components/reviews/reviews';
 import Map from '../../components/map/map';
-import {store} from '../../store';
-import {fetchNearbyOffersAction, fetchReviewsAction} from '../../store/api-actions';
-import {getNearbyOffers, getReviews} from '../../store/app-data/selectors';
+import Preloader from '../../components/preloader/preloader';
 
-type RoomProps = {
-  offers: Offer[],
-}
-
-function Room(props: RoomProps): JSX.Element {
-  const {offers} = props;
+function Room(): JSX.Element {
   const {id} = useParams<{ id: string; }>();
   const propertyId = Number(id);
-  const property = offers.find((offer: Offer) => offer.id === propertyId);
+
+  const dispatch = useAppDispatch();
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const property = useAppSelector(getOffer);
+  const favoriteOffers = useAppSelector(getFavoriteOffers);
+  const nearbyOffers = useAppSelector(getNearbyOffers);
+
+  const [isFavorite, setIsFavorite] = useState(property !== null ? property.isFavorite : false);
 
   useEffect(() => {
-    store.dispatch(fetchNearbyOffersAction(propertyId));
-    store.dispatch(fetchReviewsAction(propertyId));
-  }, [propertyId]);
+    setIsFavorite(property !== null ? property.isFavorite : false);
+  }, [property]);
 
-  const nearbyOffers = useAppSelector(getNearbyOffers);
-  const reviews = useAppSelector(getReviews);
+  useEffect(() => {
+    dispatch(fetchOfferAction(propertyId));
+    dispatch(fetchNearbyOffersAction(propertyId));
+    dispatch(fetchReviewsAction(propertyId));
+  }, [authorizationStatus, isFavorite, favoriteOffers, propertyId]);
+
+  if (property === null) {
+    return <Preloader/>;
+  }
 
   if (!property) {
     return <NotFound/>;
   }
 
   const {bedrooms, images, isPremium, title, rating, type, maxAdults, price, host, description} = property;
+
+  const handleAddToFavorites = async (evt: MouseEvent) => {
+    evt.preventDefault();
+
+    if (isAuth(authorizationStatus)) {
+      await dispatch(setIsFavoriteAction({
+        offerId: property.id,
+        isFavorite: !isFavorite,
+        onSuccess: setIsFavorite,
+      }));
+
+      await dispatch(fetchOffersAction());
+    } else {
+      dispatch(redirectToRoute(AppRoute.Login));
+    }
+  };
 
   return (
     <>
@@ -58,7 +88,11 @@ function Room(props: RoomProps): JSX.Element {
               <h1 className="property__name">
                 {title}
               </h1>
-              <button className="property__bookmark-button button" type="button">
+              <button
+                className={`property__bookmark-button${isFavorite ? ' property__bookmark-button--active' : ''} button`}
+                type="button"
+                onClick={handleAddToFavorites}
+              >
                 <svg className="property__bookmark-icon" width="31" height="33">
                   <use xlinkHref="#icon-bookmark"></use>
                 </svg>
@@ -137,24 +171,18 @@ function Room(props: RoomProps): JSX.Element {
                 </p>
               </div>
             </div>
-            <section className="property__reviews reviews">
-              <h2 className="reviews__title">
-                Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
-              </h2>
-              <ReviewsList reviews={reviews}/>
-              <ReviewsForm offerId={propertyId}/>
-            </section>
+            <Reviews offerId={propertyId}/>
           </div>
         </div>
         <section className="property__map map">
-          <Map activeOffer={propertyId} className="property__map" offers={offers}/>
+          <Map activeOffer={propertyId} className="property__map" offers={[property, ...nearbyOffers]}/>
         </section>
       </section>
       <div className="container">
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighbourhood</h2>
           <div className="near-places__list places__list">
-            <OfferCardList offers={nearbyOffers} offerType={OfferType.NearPlace} setActiveOffer={() => false}/>
+            <OfferCardList offers={nearbyOffers} offerType={OfferType.NearPlace} onActiveOfferChange={() => false}/>
           </div>
         </section>
       </div>

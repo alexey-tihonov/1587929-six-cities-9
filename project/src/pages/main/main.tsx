@@ -1,41 +1,50 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {cities, SortType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {fillOffers} from '../../store/app-process/app-process';
-import {getData} from '../../store/app-data/selectors';
-import {getActiveCity, getCurrentOffers} from '../../store/app-process/selectors';
-import {getOffers, sortOffers} from '../../utils';
+import {fetchOffersAction} from '../../store/api-actions';
+import {setActiveCityOffers} from '../../store/app-process/app-process';
+import {getOffers} from '../../store/app-data/selectors';
+import {getActiveCity, getActiveCityOffers} from '../../store/app-process/selectors';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
+import {filterOffers, sortOffers} from '../../utils';
 import CityList from '../../components/city-list/city-list';
-import Map from '../../components/map/map';
-import OfferCardList from '../../components/offer-card-list/offer-card-list';
-import Sort from '../../components/sort/sort';
+import Places from '../../components/places/places';
+import NoPlaces from '../../components/no-places/no-places';
+import Preloader from '../../components/preloader/preloader';
 
 type PageMainProps = {
   offerType: string;
 }
 
 function Main({offerType}: PageMainProps): JSX.Element {
-  const activeCity = useAppSelector(getActiveCity);
-  const data = useAppSelector(getData);
-  const offers = useAppSelector(getCurrentOffers);
   const dispatch = useAppDispatch();
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const activeCity = useAppSelector(getActiveCity);
+  const data = useAppSelector(getOffers);
+  const offers = useAppSelector(getActiveCityOffers);
 
-  const [activeOffer, setActiveOffer] = useState<number | null>(null);
   const [sort, setSort] = useState(SortType.Default.toString());
-  const isExistOffers = (offers.length > 0);
-  let currentOffers = getOffers(activeCity, data);
+  const isExistOffers = offers !== null && (offers.length > 0);
 
   useEffect(() => {
-    currentOffers = getOffers(activeCity, data);
+    dispatch(fetchOffersAction());
+  }, [authorizationStatus, dispatch]);
+
+  useEffect(() => {
     setSort(SortType.Default);
-    dispatch(fillOffers(currentOffers));
-  }, [activeCity]);
+    dispatch(setActiveCityOffers(data));
+  }, [activeCity, authorizationStatus, data, dispatch]);
 
   useEffect(() => {
     if (isExistOffers) {
-      dispatch(fillOffers(sortOffers(sort, currentOffers)));
+      const unsortedOffers = filterOffers(activeCity, data);
+      dispatch(setActiveCityOffers(sortOffers(sort, unsortedOffers)));
     }
   }, [sort]);
+
+  if (offers === null) {
+    return <Preloader/>;
+  }
 
   return (
     <>
@@ -46,26 +55,9 @@ function Main({offerType}: PageMainProps): JSX.Element {
       <div className="cities">
         <div className={`cities__places-container${(isExistOffers) ? '' : ' cities__places-container--empty'} container`}>
           {isExistOffers ? (
-            <>
-              <section className="cities__places places">
-                <h2 className="visually-hidden">Places</h2>
-                <b className="places__found">{currentOffers.length} places to stay in Amsterdam</b>
-                <Sort sort={sort} setSort={setSort}/>
-                <div className="cities__places-list places__list tabs__content">
-                  <OfferCardList offers={offers} offerType={offerType} setActiveOffer={setActiveOffer}/>
-                </div>
-              </section>
-              <div className="cities__right-section">
-                <Map className="cities__map" activeOffer={activeOffer} offers={offers}/>
-              </div>
-            </>
+            <Places cityName={activeCity} offers={offers} offerType={offerType} sort={sort} onSortChange={setSort}/>
           ) : (
-            <section className="cities__no-places">
-              <div className="cities__status-wrapper tabs__content">
-                <b className="cities__status">No places to stay available</b>
-                <p className="cities__status-description">We could not find any property available at the moment in Dusseldorf</p>
-              </div>
-            </section>
+            <NoPlaces cityName={activeCity}/>
           )}
         </div>
       </div>

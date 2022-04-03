@@ -1,4 +1,5 @@
 export const MAX_RATING = 5;
+export const MAX_REVIEWS = 10;
 
 export const cities = [
   'Paris',
@@ -21,6 +22,7 @@ export enum APIRoute {
   Login = '/login',
   Logout = '/logout',
   Comments = '/comments',
+  Favorite = '/favorite',
 }
 
 export enum AuthorizationStatus {
@@ -62,4 +64,11 @@ export enum NameSpace {
   app = 'APP',
   data = 'DATA',
   user = 'USER',
+}
+
+export enum ReviewSendStatus {
+  Error = 'ERROR',
+  InProcess = 'IN_PROCESS',
+  Success = 'SUCCESS',
+  Unknown = 'UNKNOWN',
 }

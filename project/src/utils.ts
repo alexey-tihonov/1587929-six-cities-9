@@ -1,5 +1,6 @@
-import {AuthorizationStatus, SortType} from './const';
+import {AuthorizationStatus, SortType, cities} from './const';
 import {Offer} from './types/offer';
+import {Review} from './types/review';
 
 export const getDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -10,7 +11,7 @@ export const getDate = (dateString: string) => {
 
 export const getPercent = (partialValue: number, totalValue: number) => (100 * partialValue) / totalValue;
 
-export const getOffers = (city: string, offers: Offer[]) => offers.filter((offer) => offer.city.name === city);
+export const filterOffers = (city: string, offers: Offer[]) => offers.filter((offer) => offer.city.name === city);
 
 export const sortOffers = (sort: string, offers: Offer[]) => {
   switch (sort) {
@@ -26,5 +27,16 @@ export const sortOffers = (sort: string, offers: Offer[]) => {
   }
 };
 
+export const sortReviews = (reviews: Review[]) => {
+  if (reviews === []) {
+    return reviews;
+  }
+
+  return reviews.sort((prev, next) => Date.parse(next.date) - Date.parse(prev.date));
+};
+
 export const isCheckedAuth = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Unknown;
 export const isAuth = (authorizationStatus: AuthorizationStatus): boolean => authorizationStatus === AuthorizationStatus.Auth;
+
+export const getRandomNumber = (min: number, max: number):number => Math.floor(Math.random() * (max - min + 1)) + min;
+export const getRandomCity = () => cities[getRandomNumber(0, cities.length - 1)];
