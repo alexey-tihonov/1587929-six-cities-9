@@ -1,28 +1,35 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {NameSpace, cities, ReviewSendStatus} from '../../const';
+import {NameSpace, cities, ReviewSendStatus, SortType} from '../../const';
 import {AppProcess} from '../../types/state';
-import {filterOffers} from '../../utils';
+import {filterOffers, sortOffers} from '../../utils';
 
 const initialState: AppProcess = {
   activeCity: cities[0],
-  activeCityOffers: null,
+  activeCityOffers: [],
   reviewSendStatus: ReviewSendStatus.Unknown,
+  sortType: SortType.Default,
 };
 
 export const appProcess = createSlice({
   name: NameSpace.app,
   initialState,
   reducers: {
-    changeCity: (state, action) => {
+    setActiveCity: (state, action) => {
       state.activeCity = action.payload;
+      state.sortType = SortType.Default;
     },
     setActiveCityOffers: (state, action) => {
-      state.activeCityOffers = filterOffers(state.activeCity, action.payload);
+      const sortType = state.sortType;
+      const unsortedOffers = filterOffers(state.activeCity, action.payload);
+      state.activeCityOffers = sortOffers(sortType, unsortedOffers);
     },
     setReviewSendStatus: (state, action) => {
       state.reviewSendStatus = action.payload;
     },
+    setSortType: (state, action) => {
+      state.sortType = action.payload;
+    },
   },
 });
 
-export const {changeCity, setActiveCityOffers, setReviewSendStatus} = appProcess.actions;
+export const {setActiveCity, setActiveCityOffers, setReviewSendStatus, setSortType} = appProcess.actions;

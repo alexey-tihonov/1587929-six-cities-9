@@ -1,5 +1,5 @@
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {changeCity} from '../../store/app-process/app-process';
+import {setActiveCity} from '../../store/app-process/app-process';
 import {getActiveCity} from '../../store/app-process/selectors';
 
 type CityProps = {
@@ -12,7 +12,7 @@ function City({city}: CityProps) {
 
   return (
     <li className="locations__item">
-      <a className={`locations__item-link tabs__item${activeCity === city ? ' tabs__item--active' : ''}`} onClick={() => dispatch(changeCity(city))}>
+      <a className={`locations__item-link tabs__item${activeCity === city ? ' tabs__item--active' : ''}`} onClick={() => dispatch(setActiveCity(city))}>
         <span>{city}</span>
       </a>
     </li>

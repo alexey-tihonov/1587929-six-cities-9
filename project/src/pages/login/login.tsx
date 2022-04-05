@@ -3,10 +3,11 @@ import {Link, useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {useAppSelector} from '../../hooks';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
-import {changeCity} from '../../store/app-process/app-process';
-import LoginForm from '../../components/login-form/login-form';
+import {setActiveCity} from '../../store/app-process/app-process';
 import {getRandomCity, isAuth} from '../../utils';
 import {AppRoute} from '../../const';
+import Header from '../../components/header/header';
+import LoginForm from '../../components/login-form/login-form';
 
 function Login(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
@@ -22,19 +23,24 @@ function Login(): JSX.Element {
   }, [authorizationStatus]);
 
   return (
-    <div className="page__login-container container">
-      <LoginForm/>
-      <section className="locations locations--login locations--current">
-        <div className="locations__item">
-          <Link
-            className="locations__item-link"
-            to={AppRoute.Root}
-            onClick={() => dispatch(changeCity(locationsItem))}
-          >
-            <span>{locationsItem}</span>
-          </Link>
+    <div className="page page--gray page--login">
+      <Header/>
+      <main className="page__main page__main--login">
+        <div className="page__login-container container">
+          <LoginForm/>
+          <section className="locations locations--login locations--current">
+            <div className="locations__item">
+              <Link
+                className="locations__item-link"
+                to={AppRoute.Root}
+                onClick={() => dispatch(setActiveCity(locationsItem))}
+              >
+                <span>{locationsItem}</span>
+              </Link>
+            </div>
+          </section>
         </div>
-      </section>
+      </main>
     </div>
   );
 }
