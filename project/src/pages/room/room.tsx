@@ -1,6 +1,6 @@
 import {useParams} from 'react-router-dom';
 import React, {MouseEvent, useEffect, useState} from 'react';
-import {AppRoute, MAX_RATING, OfferType} from '../../const';
+import {AppRoute, MAX_GALLERY, MAX_RATING, OfferType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {redirectToRoute} from '../../store/action';
 import {
@@ -50,7 +50,8 @@ function Room(): JSX.Element {
     return <NotFound/>;
   }
 
-  const {bedrooms, images, isPremium, title, rating, type, maxAdults, price, host, description} = property;
+  const {bedrooms, isPremium, title, rating, type, maxAdults, price, host, description} = property;
+  const images = property.images.slice(0, MAX_GALLERY);
 
   const handleAddToFavorites = async (evt: MouseEvent) => {
     evt.preventDefault();
