@@ -4,19 +4,18 @@ import {AppRoute, MAX_GALLERY, MAX_RATING, OfferType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {redirectToRoute} from '../../store/action';
 import {
-  fetchNearbyOffersAction,
-  fetchOfferAction, fetchOffersAction,
-  fetchReviewsAction,
+  fetchOfferAction,
+  fetchOffersAction,
   setIsFavoriteAction
 } from '../../store/api-actions';
-import {getFavoriteOffers, getNearbyOffers} from '../../store/app-data/selectors';
+import {getFavoriteOffers, getLoadedDataStatus, getNearbyOffers} from '../../store/app-data/selectors';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import {getOffer} from '../../store/app-data/selectors';
 import {getPercent, isAuth} from '../../utils';
 import Header from '../../components/header/header';
 import Preloader from '../../components/preloader/preloader';
-import OfferCardList from '../../components/offer-card-list/offer-card-list';
 import NotFound from '../../pages/not-found/not-found';
+import OfferCardList from '../../components/offer-card-list/offer-card-list';
 import Reviews from '../../components/reviews/reviews';
 import Map from '../../components/map/map';
 
@@ -25,6 +24,7 @@ function Room(): JSX.Element {
   const propertyId = Number(id);
 
   const dispatch = useAppDispatch();
+  const isDataLoaded = useAppSelector(getLoadedDataStatus);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const property = useAppSelector(getOffer);
   const favoriteOffers = useAppSelector(getFavoriteOffers);
@@ -34,15 +34,13 @@ function Room(): JSX.Element {
 
   useEffect(() => {
     setIsFavorite(property !== null ? property.isFavorite : false);
-  }, [property]);
+  }, [dispatch, property]);
 
   useEffect(() => {
     dispatch(fetchOfferAction(propertyId));
-    dispatch(fetchNearbyOffersAction(propertyId));
-    dispatch(fetchReviewsAction(propertyId));
-  }, [isFavorite, favoriteOffers, propertyId]);
+  }, [dispatch, favoriteOffers, isFavorite, propertyId]);
 
-  if (property === null) {
+  if (!isDataLoaded) {
     return <Preloader/>;
   }
 

@@ -5,6 +5,7 @@ import {AppRoute, MAX_RATING, OfferType} from '../../const';
 import {getPercent, isAuth} from '../../utils';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchFavoriteOffersAction, fetchOffersAction, setIsFavoriteAction} from '../../store/api-actions';
+import {setLoadedDataStatus} from '../../store/app-data/app-data';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import {redirectToRoute} from '../../store/action';
 
@@ -70,7 +71,10 @@ function OfferCard(props: OfferCardProps): JSX.Element {
     <article className={`${placeCardClassName} place-card`} onMouseEnter={handleMouseEnter}>
       {offer.isPremium && <div className="place-card__mark"><span>Premium</span></div>}
       <div className={`${placeCardImageWrapperClassName} place-card__image-wrapper`}>
-        <Link className="header__logo-link" to={`/offer/${offer.id}`}>
+        <Link
+          to={`/offer/${offer.id}`}
+          onClick={() => dispatch(setLoadedDataStatus(false))}
+        >
           <img className="place-card__image" src={offer.previewImage} width={placeCardImageWidth} height={placeCardImageHeight} alt="Place image"/>
         </Link>
       </div>
@@ -98,7 +102,10 @@ function OfferCard(props: OfferCardProps): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link className="header__logo-link" to={`/offer/${offer.id}`}>
+          <Link
+            to={`/offer/${offer.id}`}
+            onClick={() => dispatch(setLoadedDataStatus(false))}
+          >
             {offer.title}
           </Link>
         </h2>

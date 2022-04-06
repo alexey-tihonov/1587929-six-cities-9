@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
 import Header from '../../components/header/header';
 import CityList from '../../components/city-list/city-list';
-import {fetchOffersAction} from '../../store/api-actions';
 import {useAppDispatch, useAppSelector} from '../../hooks';
+import {fetchOffersAction} from '../../store/api-actions';
+import {setLoadedDataStatus} from '../../store/app-data/app-data';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
 type PageMainProps = {
@@ -12,6 +13,10 @@ type PageMainProps = {
 function Main({offerType}: PageMainProps): JSX.Element {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
+
+  useEffect(() => {
+    dispatch(setLoadedDataStatus(false));
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchOffersAction());

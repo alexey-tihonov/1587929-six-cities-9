@@ -5,8 +5,9 @@ import {Offer} from '../../types/offer';
 import {Review} from '../../types/review';
 
 const initialState: AppData = {
+  isServerAvailable: true,
   isDataLoaded: false,
-  favoriteOffers: null,
+  favoriteOffers: [] as Offer[],
   nearbyOffers: [] as Offer[],
   offer: null,
   offers: [] as Offer[],
@@ -19,6 +20,7 @@ export const appData = createSlice({
   reducers: {
     loadOffer: (state, action) => {
       state.offer = action.payload;
+      state.isDataLoaded = true;
     },
     loadOffers: (state, action) => {
       state.offers = action.payload;
@@ -26,6 +28,7 @@ export const appData = createSlice({
     },
     loadFavoriteOffers: (state, action) => {
       state.favoriteOffers = action.payload;
+      state.isDataLoaded = true;
     },
     loadNearbyOffers: (state, action) => {
       state.nearbyOffers = action.payload;
@@ -33,7 +36,13 @@ export const appData = createSlice({
     loadReviews: (state, action) => {
       state.reviews = action.payload;
     },
+    setLoadedDataStatus: (state, action) => {
+      state.isDataLoaded = action.payload;
+    },
+    setServerAvailabilityStatus: (state, action) => {
+      state.isServerAvailable = action.payload;
+    },
   },
 });
 
-export const {loadOffer, loadOffers, loadFavoriteOffers, loadNearbyOffers, loadReviews} = appData.actions;
+export const {loadOffer, loadOffers, loadFavoriteOffers, loadNearbyOffers, loadReviews, setLoadedDataStatus, setServerAvailabilityStatus} = appData.actions;

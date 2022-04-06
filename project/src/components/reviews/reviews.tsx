@@ -7,7 +7,6 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchReviewsAction} from '../../store/api-actions';
 import {getReviews} from '../../store/app-data/selectors';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
-import {getReviewSendStatus} from '../../store/app-process/selectors';
 
 type ReviewsProps = {
   offerId: number;
@@ -16,12 +15,11 @@ type ReviewsProps = {
 function Reviews({offerId}: ReviewsProps): JSX.Element {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  const reviewSendStatus = useAppSelector(getReviewSendStatus);
   const reviews = sortReviews([...useAppSelector(getReviews)]).slice(0, MAX_REVIEWS);
 
   useEffect(() => {
     dispatch(fetchReviewsAction(offerId));
-  }, [dispatch, offerId, reviewSendStatus]);
+  }, [dispatch, offerId]);
 
   return (
     <section className="property__reviews reviews">

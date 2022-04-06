@@ -6,7 +6,6 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getOffers} from '../../store/app-data/selectors';
 import {getSortType} from '../../store/app-process/selectors';
 import {setActiveCityOffers, setSortType} from '../../store/app-process/app-process';
-import {filterOffers, sortOffers} from '../../utils';
 import {Offer} from '../../types/offer';
 
 type PlacesProps = {
@@ -25,8 +24,7 @@ function Places({cityName, cityOffers, offerType}: PlacesProps) {
   const setSort = (sort: string) => dispatch(setSortType(sort));
 
   useEffect(() => {
-    const unsortedOffers = filterOffers(cityName, offers);
-    dispatch(setActiveCityOffers(sortOffers(sortType, unsortedOffers)));
+    dispatch(setActiveCityOffers(offers));
   }, [dispatch, cityName, offers, sortType]);
 
   return (

@@ -5,8 +5,9 @@ import {Review} from './review';
 import {UserInfo} from './user-info';
 
 export type AppData = {
+  isServerAvailable: boolean,
   isDataLoaded: boolean,
-  favoriteOffers: Offer[] | null,
+  favoriteOffers: Offer[],
   nearbyOffers: Offer[],
   offer: Offer | null,
   offers: Offer[],

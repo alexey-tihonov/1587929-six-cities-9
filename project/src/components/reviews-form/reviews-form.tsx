@@ -25,9 +25,9 @@ function ReviewsForm({offerId}: ReviewsFormProps): JSX.Element {
 
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const data = {comment, rating};
+    const review = {comment, rating};
     dispatch(setReviewSendStatus(ReviewSendStatus.InProcess));
-    dispatch(sendReviewAction({data, offerId}));
+    dispatch(sendReviewAction({review, offerId}));
   };
   const handleRatingChange = ({target}: ChangeEvent<HTMLInputElement>) => setRating(Number(target.value));
   const handleCommentChange = ({target}: ChangeEvent<HTMLTextAreaElement>) => setComment(target.value);

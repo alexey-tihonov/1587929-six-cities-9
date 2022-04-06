@@ -36,6 +36,7 @@ export enum HttpCode  {
   BadRequest = 400,
   Unauthorized = 401,
   NotFound = 404,
+  Unavailable = 503,
 }
 
 export enum OfferType {

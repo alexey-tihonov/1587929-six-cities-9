@@ -2,7 +2,9 @@ import React from 'react';
 import City from '../city/city';
 import {cities} from '../../const';
 import {useAppSelector} from '../../hooks';
+import {getLoadedDataStatus} from '../../store/app-data/selectors';
 import {getActiveCity, getActiveCityOffers} from '../../store/app-process/selectors';
+import Preloader from '../../components/preloader/preloader';
 import Places from '../places/places';
 import NoPlaces from '../no-places/no-places';
 
@@ -11,10 +13,15 @@ type CityListProps = {
 }
 
 function CityList({offerType}: CityListProps) {
-  const offers = useAppSelector(getActiveCityOffers);
+  const isDataLoaded = useAppSelector(getLoadedDataStatus);
+  const cityOffers = useAppSelector(getActiveCityOffers);
   const activeCity = useAppSelector(getActiveCity);
 
-  const isExistOffers = offers.length > 0;
+  const isExistOffers = cityOffers.length > 0;
+
+  if (!isDataLoaded) {
+    return <Preloader/>;
+  }
 
   return (
     <>
@@ -29,7 +36,7 @@ function CityList({offerType}: CityListProps) {
       <div className="cities">
         <div className={`cities__places-container${(isExistOffers) ? '' : ' cities__places-container--empty'} container`}>
           {isExistOffers ? (
-            <Places cityName={activeCity} cityOffers={offers} offerType={offerType}/>
+            <Places cityName={activeCity} cityOffers={cityOffers} offerType={offerType}/>
           ) : (
             <NoPlaces cityName={activeCity}/>
           )}

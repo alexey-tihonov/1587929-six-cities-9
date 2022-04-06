@@ -1,7 +1,13 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {api, store} from './index';
 import {redirectToRoute} from './action';
-import {loadOffer, loadOffers, loadFavoriteOffers, loadNearbyOffers, loadReviews} from './app-data/app-data';
+import {
+  loadOffer,
+  loadOffers,
+  loadFavoriteOffers,
+  loadNearbyOffers,
+  loadReviews
+} from './app-data/app-data';
 import {setActiveCityOffers, setReviewSendStatus} from './app-process/app-process';
 import {addUserInfo, requireAuthorization} from './user-process/user-process';
 import {errorHandle} from '../services/error-handle';
@@ -20,7 +26,9 @@ export const fetchOfferAction = createAsyncThunk(
     try {
       const {data} = await api.get<Offer>(`${APIRoute.Offers}/${offerId.toString()}`);
       store.dispatch(loadOffer(data));
+      store.dispatch(fetchNearbyOffersAction(offerId));
     } catch (error) {
+      store.dispatch(loadOffer(null));
       errorHandle(error);
     }
   },
@@ -33,6 +41,7 @@ export const fetchOffersAction = createAsyncThunk(
       store.dispatch(loadOffers(data));
       store.dispatch(setActiveCityOffers(data));
     } catch (error) {
+      store.dispatch(loadOffers([]));
       errorHandle(error);
     }
   },
@@ -46,6 +55,7 @@ export const fetchFavoriteOffersAction = createAsyncThunk(
       store.dispatch(loadFavoriteOffers(data));
     } catch (error) {
       errorHandle(error);
+      store.dispatch(loadFavoriteOffers([]));
     }
   },
 );
@@ -57,6 +67,7 @@ export const fetchNearbyOffersAction = createAsyncThunk(
       const {data} = await api.get<Offer[]>(`${APIRoute.Offers}/${offerId.toString()}/nearby`);
       store.dispatch(loadNearbyOffers(data));
     } catch (error) {
+      store.dispatch(loadNearbyOffers([]));
       errorHandle(error);
     }
   },
@@ -69,6 +80,7 @@ export const fetchReviewsAction = createAsyncThunk(
       const {data} = await api.get<Review[]>(`${APIRoute.Comments}/${offerId.toString()}`);
       store.dispatch(loadReviews(data));
     } catch (error) {
+      store.dispatch(loadReviews([]));
       errorHandle(error);
     }
   },
@@ -76,11 +88,12 @@ export const fetchReviewsAction = createAsyncThunk(
 
 export const sendReviewAction = createAsyncThunk(
   'APP/postReviews',
-  async (params: {data: {comment: string, rating: number}, offerId: number }) => {
+  async (params: {review: {comment: string, rating: number}, offerId: number }) => {
     try {
-      const {data, offerId} = params;
-      await api.post<Review[]>(`${APIRoute.Comments}/${offerId.toString()}`, data);
+      const {review, offerId} = params;
+      const {data} = await api.post<Review[]>(`${APIRoute.Comments}/${offerId.toString()}`, review);
       store.dispatch(setReviewSendStatus(ReviewSendStatus.Success));
+      store.dispatch(loadReviews(data));
     } catch (error) {
       store.dispatch(setReviewSendStatus(ReviewSendStatus.Error));
       errorHandle(error);

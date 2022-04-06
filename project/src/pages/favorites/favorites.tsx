@@ -2,7 +2,8 @@ import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchFavoriteOffersAction} from '../../store/api-actions';
-import {getFavoriteOffers} from '../../store/app-data/selectors';
+import {setLoadedDataStatus} from '../../store/app-data/app-data';
+import {getFavoriteOffers, getLoadedDataStatus} from '../../store/app-data/selectors';
 import {setActiveCity} from '../../store/app-process/app-process';
 import {AppRoute, cities, OfferType} from '../../const';
 import {filterOffers} from '../../utils';
@@ -13,14 +14,19 @@ import OfferCardList from '../../components/offer-card-list/offer-card-list';
 
 function Favorites(): JSX.Element {
   const dispatch = useAppDispatch();
+  const isDataLoaded = useAppSelector(getLoadedDataStatus);
   const favoriteOffers = useAppSelector(getFavoriteOffers);
   const isExistFavoriteOffers = favoriteOffers !== null && (favoriteOffers.length > 0);
+
+  useEffect(() => {
+    dispatch(setLoadedDataStatus(false));
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchFavoriteOffersAction());
   }, [dispatch, isExistFavoriteOffers]);
 
-  if (favoriteOffers === null) {
+  if (!isDataLoaded) {
     return <Preloader/>;
   }
 
