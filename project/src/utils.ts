@@ -9,7 +9,7 @@ export const getDate = (dateString: string) => {
   return {dateTime: dateTime, dateText: dateText};
 };
 
-export const getPercent = (partialValue: number, totalValue: number) => (100 * partialValue) / totalValue;
+export const getPercent = (partialValue: number, totalValue: number) => (100 * Math.round(partialValue)) / totalValue;
 
 export const filterOffers = (city: string, offers: Offer[]) => offers.filter((offer) => offer.city.name === city);
 
