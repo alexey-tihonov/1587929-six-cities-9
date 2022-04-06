@@ -31,10 +31,10 @@ export enum AuthorizationStatus {
   Unknown = 'UNKNOWN',
 }
 
-export enum HTTP_CODE {
-  BAD_REQUEST = 400,
-  UNAUTHORIZED = 401,
-  NOT_FOUND = 404,
+export enum HttpCode  {
+  BadRequest = 400,
+  Unauthorized = 401,
+  NotFound = 404,
 }
 
 export enum OfferType {
@@ -61,9 +61,9 @@ export enum MapMarker {
 }
 
 export enum NameSpace {
-  app = 'APP',
-  data = 'DATA',
-  user = 'USER',
+  App = 'APP',
+  Data = 'DATA',
+  User = 'USER',
 }
 
 export enum ReviewSendStatus {

@@ -11,7 +11,7 @@ const initialState: AppProcess = {
 };
 
 export const appProcess = createSlice({
-  name: NameSpace.app,
+  name: NameSpace.App,
   initialState,
   reducers: {
     setActiveCity: (state, action) => {
