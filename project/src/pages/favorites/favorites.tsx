@@ -5,7 +5,7 @@ import {fetchFavoriteOffersAction} from '../../store/api-actions';
 import {setLoadedDataStatus} from '../../store/app-data/app-data';
 import {getFavoriteOffers, getLoadedDataStatus} from '../../store/app-data/selectors';
 import {setActiveCity} from '../../store/app-process/app-process';
-import {AppRoute, cities, OfferType} from '../../const';
+import {AppRoute, cities, OfferCardType} from '../../const';
 import {filterOffers} from '../../utils';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
@@ -58,7 +58,7 @@ function Favorites(): JSX.Element {
                               </div>
                             </div>
                             <div className="favorites__places">
-                              <OfferCardList offers={offers} offerType={OfferType.Favorite} onActiveOfferChange={() => false}/>
+                              <OfferCardList offers={offers} offerCardType={OfferCardType.Favorite} onActiveOfferChange={() => false}/>
                             </div>
                           </li>
                         );

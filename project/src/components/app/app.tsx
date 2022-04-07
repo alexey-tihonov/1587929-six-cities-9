@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
-import {AppRoute, OfferType} from '../../const';
+import {AppRoute, OfferCardType} from '../../const';
 import {useAppSelector} from '../../hooks';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import {getServerAvailabilityStatus} from '../../store/app-data/selectors';
@@ -30,7 +30,7 @@ function App(): JSX.Element {
   return (
     <Routes>
       <Route path={AppRoute.Root} element={<Layout/>}>
-        <Route index element={<Main offerType={OfferType.City}/>}/>
+        <Route index element={<Main offerCardType={OfferCardType.City}/>}/>
         <Route path={AppRoute.Login} element={<Login/>}/>
         <Route path={AppRoute.Favorites}
           element={

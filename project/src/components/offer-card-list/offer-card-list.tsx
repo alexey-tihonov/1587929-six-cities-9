@@ -4,17 +4,17 @@ import OfferCard from '../../components/offer-card/offer-card';
 
 type OfferCardListProps = {
   offers: Offer[],
-  offerType: string,
+  offerCardType: string,
   onActiveOfferChange: (id: number) => void,
 }
 
 function OfferCardList(props: OfferCardListProps): JSX.Element {
-  const {offers, offerType, onActiveOfferChange} = props;
+  const {offers, offerCardType, onActiveOfferChange} = props;
 
   return (
     <>
       {offers.map((offer) =>
-        <OfferCard key={offer.id} offer={offer} offerType={offerType} onActiveOfferChange={onActiveOfferChange}/>)}
+        <OfferCard key={offer.id} offer={offer} offerCardType={offerCardType} onActiveOfferChange={onActiveOfferChange}/>)}
     </>
   );
 }

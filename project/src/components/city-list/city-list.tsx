@@ -9,10 +9,10 @@ import Places from '../places/places';
 import NoPlaces from '../no-places/no-places';
 
 type CityListProps = {
-  offerType: string;
+  offerCardType: string;
 }
 
-function CityList({offerType}: CityListProps) {
+function CityList({offerCardType}: CityListProps) {
   const isDataLoaded = useAppSelector(getLoadedDataStatus);
   const cityOffers = useAppSelector(getActiveCityOffers);
   const activeCity = useAppSelector(getActiveCity);
@@ -36,7 +36,7 @@ function CityList({offerType}: CityListProps) {
       <div className="cities">
         <div className={`cities__places-container${(isExistOffers) ? '' : ' cities__places-container--empty'} container`}>
           {isExistOffers ? (
-            <Places cityName={activeCity} cityOffers={cityOffers} offerType={offerType}/>
+            <Places cityName={activeCity} cityOffers={cityOffers} offerCardType={offerCardType}/>
           ) : (
             <NoPlaces cityName={activeCity}/>
           )}

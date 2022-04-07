@@ -1,4 +1,5 @@
-import {AuthorizationStatus, SortType, cities} from './const';
+import {AuthorizationStatus, SortType, cities, OfferType} from './const';
+import {AuthData} from './types/auth-data';
 import {Offer} from './types/offer';
 import {Review} from './types/review';
 
@@ -40,3 +41,19 @@ export const isAuth = (authorizationStatus: AuthorizationStatus): boolean => aut
 
 export const getRandomNumber = (min: number, max: number):number => Math.floor(Math.random() * (max - min + 1)) + min;
 export const getRandomCity = () => cities[getRandomNumber(0, cities.length - 1)];
+export const getOfferType = (type: string): string | null => {
+  const offerType = OfferType.get(type);
+  return offerType ? offerType : null;
+};
+
+export const isEmailCorrect = (email: string): boolean => {
+  const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+  return regex.test(email);
+};
+
+export const isPasswordCorrect = (password: string): boolean => {
+  const regex = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z@#$%^&*_]+$/;
+  return regex.test(password);
+};
+
+export const isValidAuthData = ({login, password}: AuthData) => isEmailCorrect(login) && isPasswordCorrect(password);

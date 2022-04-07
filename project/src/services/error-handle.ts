@@ -21,10 +21,9 @@ export const errorHandle = (error: ErrorType): void => {
         toast.error(response.data.error);
         break;
       case HttpCode.NotFound:
-        toast.info(response.data.error);
-        break;
-      case HttpCode.Unavailable:
         toast.error(response.data.error);
+        break;
+      default:
         store.dispatch(setServerAvailabilityStatus(false));
         break;
     }

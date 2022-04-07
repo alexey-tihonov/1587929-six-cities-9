@@ -11,10 +11,10 @@ import {Offer} from '../../types/offer';
 type PlacesProps = {
   cityName: string,
   cityOffers: Offer[],
-  offerType: string,
+  offerCardType: string,
 }
 
-function Places({cityName, cityOffers, offerType}: PlacesProps) {
+function Places({cityName, cityOffers, offerCardType}: PlacesProps) {
   const dispatch = useAppDispatch();
   const sortType = useAppSelector(getSortType);
   const offers = useAppSelector(getOffers);
@@ -34,7 +34,7 @@ function Places({cityName, cityOffers, offerType}: PlacesProps) {
         <b className="places__found">{cityOffers.length} places to stay in {cityName}</b>
         <Sort sort={sortType} onSortChange={setSort}/>
         <div className="cities__places-list places__list tabs__content">
-          <OfferCardList offers={cityOffers} offerType={offerType} onActiveOfferChange={setActiveOffer}/>
+          <OfferCardList offers={cityOffers} offerCardType={offerCardType} onActiveOfferChange={setActiveOffer}/>
         </div>
       </section>
       <div className="cities__right-section">

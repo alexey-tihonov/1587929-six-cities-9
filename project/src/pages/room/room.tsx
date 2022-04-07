@@ -1,6 +1,6 @@
 import {useParams} from 'react-router-dom';
 import React, {MouseEvent, useEffect, useState} from 'react';
-import {AppRoute, MAX_GALLERY, MAX_RATING, OfferType} from '../../const';
+import {AppRoute, MAX_GALLERY, MAX_RATING, OfferCardType} from '../../const';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {redirectToRoute} from '../../store/action';
 import {
@@ -11,7 +11,7 @@ import {
 import {getFavoriteOffers, getLoadedDataStatus, getNearbyOffers} from '../../store/app-data/selectors';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 import {getOffer} from '../../store/app-data/selectors';
-import {getPercent, isAuth} from '../../utils';
+import {getOfferType, getPercent, isAuth} from '../../utils';
 import Header from '../../components/header/header';
 import Preloader from '../../components/preloader/preloader';
 import NotFound from '../../pages/not-found/not-found';
@@ -48,7 +48,8 @@ function Room(): JSX.Element {
     return <NotFound/>;
   }
 
-  const {bedrooms, isPremium, title, rating, type, maxAdults, price, host, description} = property;
+  const {bedrooms, isPremium, title, rating, maxAdults, price, host, description} = property;
+  const type = getOfferType(property.type);
   const images = property.images.slice(0, MAX_GALLERY);
 
   const handleAddToFavorites = async (evt: MouseEvent) => {
@@ -107,9 +108,12 @@ function Room(): JSX.Element {
                 <span className="property__rating-value rating__value">{rating}</span>
               </div>
               <ul className="property__features">
-                <li className="property__feature property__feature--entire">
-                  {type}
-                </li>
+                {
+                  type !== null &&
+                  <li className="property__feature property__feature--entire">
+                    {type}
+                  </li>
+                }
                 <li className="property__feature property__feature--bedrooms">
                   {bedrooms} Bedrooms
                 </li>
@@ -182,7 +186,7 @@ function Room(): JSX.Element {
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <OfferCardList offers={nearbyOffers} offerType={OfferType.NearPlace} onActiveOfferChange={() => false}/>
+              <OfferCardList offers={nearbyOffers} offerCardType={OfferCardType.NearPlace} onActiveOfferChange={() => false}/>
             </div>
           </section>
         </div>

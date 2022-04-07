@@ -36,14 +36,20 @@ export enum HttpCode  {
   BadRequest = 400,
   Unauthorized = 401,
   NotFound = 404,
-  Unavailable = 503,
 }
 
-export enum OfferType {
+export enum OfferCardType {
   City = 'cities',
   Favorite = 'favorites',
   NearPlace = 'near-places'
 }
+
+export const OfferType = new Map([
+  ['apartment', 'Apartment'],
+  ['room', 'Private Room'],
+  ['house', 'House'],
+  ['hotel', 'Hotel'],
+]);
 
 export enum SortType {
   Default = 'Popular',

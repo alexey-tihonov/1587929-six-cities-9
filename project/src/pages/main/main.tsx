@@ -7,10 +7,10 @@ import {setLoadedDataStatus} from '../../store/app-data/app-data';
 import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
 type PageMainProps = {
-  offerType: string;
+  offerCardType: string;
 }
 
-function Main({offerType}: PageMainProps): JSX.Element {
+function Main({offerCardType}: PageMainProps): JSX.Element {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
@@ -20,13 +20,13 @@ function Main({offerType}: PageMainProps): JSX.Element {
 
   useEffect(() => {
     dispatch(fetchOffersAction());
-  }, [authorizationStatus, dispatch]);
+  }, [dispatch, authorizationStatus]);
 
   return (
     <div className="page page--gray page--main">
       <Header/>
       <main className="page__main page__main--index">
-        <CityList offerType={offerType}/>
+        <CityList offerCardType={offerCardType}/>
       </main>
     </div>
   );

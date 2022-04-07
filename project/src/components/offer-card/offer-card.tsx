@@ -1,8 +1,8 @@
 import {memo, MouseEvent, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {Offer} from '../../types/offer';
-import {AppRoute, MAX_RATING, OfferType} from '../../const';
-import {getPercent, isAuth} from '../../utils';
+import {AppRoute, MAX_RATING, OfferCardType} from '../../const';
+import {getOfferType, getPercent, isAuth} from '../../utils';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {fetchFavoriteOffersAction, fetchOffersAction, setIsFavoriteAction} from '../../store/api-actions';
 import {setLoadedDataStatus} from '../../store/app-data/app-data';
@@ -11,12 +11,13 @@ import {redirectToRoute} from '../../store/action';
 
 type OfferCardProps = {
   offer: Offer;
-  offerType: string,
+  offerCardType: string,
   onActiveOfferChange: (id: number) => void;
 }
 
 function OfferCard(props: OfferCardProps): JSX.Element {
-  const {offer, offerType, onActiveOfferChange} = props;
+  const {offer, offerCardType, onActiveOfferChange} = props;
+  const offerType = getOfferType(offer.type);
 
   const [isFavorite, setIsFavorite] = useState(offer.isFavorite);
   const dispatch = useAppDispatch();
@@ -49,19 +50,19 @@ function OfferCard(props: OfferCardProps): JSX.Element {
   let placeCardImageWidth = '260';
   let placeCardImageHeight = '200';
 
-  switch (offerType) {
-    case OfferType.City:
+  switch (offerCardType) {
+    case OfferCardType.City:
       placeCardClassName = 'cities__place-card';
       placeCardImageWrapperClassName = 'cities__image-wrapper';
       break;
-    case OfferType.Favorite:
+    case OfferCardType.Favorite:
       placeCardClassName = 'favorites__card';
       placeCardInfoClassName = 'favorites__card-info';
       placeCardImageWrapperClassName = 'favorites__image-wrapper';
       placeCardImageWidth = '150';
       placeCardImageHeight = '110';
       break;
-    case OfferType.NearPlace:
+    case OfferCardType.NearPlace:
       placeCardClassName = 'near-places__card';
       placeCardImageWrapperClassName = 'near-places__image-wrapper';
       break;
@@ -109,10 +110,10 @@ function OfferCard(props: OfferCardProps): JSX.Element {
             {offer.title}
           </Link>
         </h2>
-        <p className="place-card__type">{offer.type}</p>
+        {offerType !== null && <p className="place-card__type">{offerType}</p>}
       </div>
     </article>
   );
 }
 
-export default memo(OfferCard, (prevProps, nextProps) => prevProps.offer.id === nextProps.offer.id);
+export default memo(OfferCard, (prevProps, nextProps) => prevProps.offer.id === nextProps.offer.id && prevProps.offer.isFavorite === nextProps.offer.isFavorite);
